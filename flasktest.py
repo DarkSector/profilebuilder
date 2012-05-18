@@ -24,15 +24,35 @@ app.config.from_pyfile('config.cfg')
 
 temp_admin = 'rhknadmin123'
 temp_auth = 'clearancehash1'
+db_exists = False
+user_coll_exists = False
 
+#check if the database exists
+#then check if user base exists
+
+conn = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)
+dbobj = conn[pymongoconfig.MONGO_DATABASE]
+users = dbobj['accesslist']
+profiles = dbobj['profiles']
+
+"""
 try:
-	c = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)
-	dbobj = c[pymongoconfig.MONGO_DATABASE]
+	conn = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)
+	dbobj = conn[pymongoconfig.MONGO_DATABASE]
 except pymongo.errors.AutoReconnect:
 	unfortunate = True
 else:
 	unfortunate = False
-
+	for i in conn.database_names():
+		if i == pymongoconfig.MONGO_DATABASE:
+			db_exists = True
+			#check if userbase exists
+			for l in dbobj.collection_names():
+				if l == 'users':
+					user_coll_exists = True
+					break
+			break
+"""
 
 #class newProfileBuilderForm(Form):
 #	"""Function used to create custom fields"""
@@ -56,17 +76,17 @@ else:
 @app.route('/')
 def show_profiles():
 	"""docstring for show_profiles"""
-	if not session.logged_in:
-		return redirect(url_for('login'))
-	else:
-		return render_template('index.html')
+	#if not session.logged_in:
+	#	return redirect(url_for('login'))
+	#else:
+	#	return render_template('index.html')
+	return render_template('index.html')
 	
 @app.route('/add',methods=["GET","POST"])
 def add_profile():
 	"""Add a new profile"""
-	#profileform = newProfileBuilderForm(request.form)
-	#if profileform.validate_on_submit():
-
+	#if request.method == "POST":
+	#	name = request.form['']
 	return render_template('add.html')
 	
 @app.route('/edit')
@@ -90,11 +110,25 @@ def login():
 	"""docstring for login"""
 	#loginform = loginForm(request.form)
 	error = None
-	#if loginform.validate_on_submit():
-		
-	#if request.method == "POST":	
-	#	flash('you were logged in')
-	#	return redirect(url_for('show_entries'))
+	if request.method == "POST":
+		accuser = request.form['username']
+		check_user = users.find_one({'username': accuser})
+		print check_user
+		print users.find_one()
+		if check_user:
+			#now check for password
+			accpass = request.form['password']
+			
+			#prepasshash = 
+			check_pass = check_password_hash(check_user['password'],accpass)
+			if check_pass:
+				session['logged_in'] = True
+				return redirect(url_for('show_profiles'))
+			else:
+				print "PASSWORD CHECK FAILED"
+				
+		else:
+			print "USERNAME", accuser ,"DOESN'T EXIST"
 	return render_template('login.html', error=error)
 	
 @app.route('/logout')
