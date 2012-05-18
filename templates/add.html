@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block css %}
+.container > .content{
+	background-color: #fff;
+	padding: 20px;
+	/* negative indent the amount of the padding to maintain the grid system */
+	margin: 0 -20px;
+	-webkit-border-radius: 0 0 6px 6px;
+	-moz-border-radius: 0 0 6px 6px;
+	border-radius: 0 0 6px 6px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+footer p
+{
+	text-align: center;
+}
+
+.newbody
+{
+	min-height: 200px
+}
+
+.heading
+{
+	text-align: center;
+}
+
+{% endblock %}
+{% block body %}
+<div class="hero-unit">
+	<a style="font-size: 16px;" href="{{ url_for('add_profile') }}">+ Add Profile</a> <a style="font-size: 16px;" >/</a>
+	<a style="font-size: 16px;" href="{{ url_for('logout') }}"> - Logout</a>
+	<p class="heading">Rural Housing Knowledge Network</p>
+	<hr />
+	<form class="form" action="{{ url_for('add_profile') }}" method="POST">
+		<label>Title:</label><input type="text" placeholder="Please enter a suitable title" class="span5"  name="title"/><br />
+		<label>Unique Title:</label>
+		<input type="text" placeholder="A unique title to appear in the url" class="span5"  name="unique"/><br />
+		<label>Select type of profile</label>
+		<select class="span5">
+			<option value="roofing">Roofing</option>
+			<option value="Walling">Walling</option>
+			<option value="Foundation">Foundation</option>
+			<option value="misc">Misc</option>
+		</select><br />
+		<hr />
+		<button type="submit" class="btn btn-primary">Submit profile details »</button>
+		<button type="reset" class="btn">Reset / Cancel</button>
+		<hr />
+		<small>Once the profile is added, you can add the content in the edit section. You will be redirected to the edit section once you hit submit.</small><br /><br />
+		<a href="{{ url_for('show_profiles') }}">See all profiles?</a>
+	</form>	
+</div>	
+{% endblock %}
