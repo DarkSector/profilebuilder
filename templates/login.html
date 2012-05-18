@@ -29,16 +29,16 @@
 	}
 {% endblock %}
 {% block js %}
-<script src="{{ url_for('static', filename='js/d3.js') }}"></script>
+
 {% endblock %}
 
-{% block body %}
+{% block loginbody %}
 	<div class="row">
 		<div class="span4">
 			<div class="hero-unit">
-		<p>Rural Housing Knowledge Network</p>	
-		<hr />
-		<p>Please Enter login details below</p>
+				<p>Rural Housing Knowledge Network</p>	
+				<hr />
+				<p>Please Enter login details below</p>
 		<form action="{{ url_for('login') }}" method="POST">
 			<input class="" placeholder="Username" type="text" name="username" /><br />
 			<input class="" placeholder="Pasword" type="password" name="password" /><br />
@@ -49,70 +49,7 @@
 			</div><!-- hero unit ends -->
 		</div><!-- span4 ends -->	
 		<div class="span6">
-			<div id="chart">
-			</div>	
-			    <script type="text/javascript">
-				
-			var width = 400,
-			    height = 500,
-			    radius = 6,
-			    fill = d3.scale.category20();
-
-			var force = d3.layout.force()
-			    .charge(-120)
-			    .linkDistance(30)
-			    .size([width, height]);
-
-			var vis = d3.select("chart").append("div")
-			    .style("width", width + "px")
-			    .style("height", height + "px");
-
-			d3.json("{{ url_for('static', filename='js/miserables.json')}}", function(json) {
-			  var link = vis.selectAll("div.link")
-			      .data(json.links)
-			    .enter().append("div")
-			      .attr("class", "link");
-
-			  var node = vis.selectAll("div.node")
-			      .data(json.nodes)
-			    .enter().append("div")
-			      .attr("class", "node")
-			      .style("background", function(d) { return fill(d.group); })
-			      .style("border-color", function(d) { return d3.rgb(fill(d.group)).darker(); })
-			      .call(force.drag);
-
-			  force
-			      .nodes(json.nodes)
-			      .links(json.links)
-			      .on("tick", tick)
-			      .start();
-
-			  function tick() {
-			    node.style("left", function(d) { return (d.x = Math.max(radius, Math.min(width - radius, d.x))) + "px"; })
-			        .style("top", function(d) { return (d.y = Math.max(radius, Math.min(height - radius, d.y))) + "px"; });
-
-			    link.style("left", function(d) { return d.source.x + "px"; })
-			        .style("top", function(d) { return d.source.y + "px"; })
-			        .style("width", length)
-			        .style("-webkit-transform", transform)
-			        .style("-moz-transform", transform)
-			        .style("-ms-transform", transform)
-			        .style("-o-transform", transform)
-			        .style("transform", transform);
-			  }
-
-			  function transform(d) {
-			    return "rotate(" + Math.atan2(d.target.y - d.source.y, d.target.x - d.source.x) * 180 / Math.PI + "deg)";
-			  }
-
-			  function length(d) {
-			    var dx = d.target.x - d.source.x,
-			        dy = d.target.y - d.source.y;
-			    return Math.sqrt(dx * dx + dy * dy) + "px";
-			  }
-			});
-
-			    </script>
+		
 		</div><!-- span8 ends -->	
 	</div><!-- row ends -->
 {% endblock %}

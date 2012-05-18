@@ -31,10 +31,13 @@ footer p
 {% endblock %}
 {% block body %}
 <div class="hero-unit">
+
 	<a style="font-size: 16px;" href="{{ url_for('add_profile') }}">+ Add Profile</a> <a style="font-size: 16px;" >/</a>
 	<a style="font-size: 16px;" href="{{ url_for('logout') }}"> - Logout</a>
+
 	<p class="heading">Rural Housing Knowledge Network</p>
 	<hr />
+
 	<form class="form" action="{{ url_for('add_profile') }}" method="POST">
 		<label>Title:</label><input type="text" placeholder="Please enter a suitable title" class="span5"  name="title"/><br />
 		<label>Unique Title:</label>
@@ -52,6 +55,7 @@ footer p
 		<hr />
 		<small>Once the profile is added, you can add the content in the edit section. You will be redirected to the edit section once you hit submit.</small><br /><br />
 		<a href="{{ url_for('show_profiles') }}">See all profiles?</a>
-	</form>	
+	</form>
+
 </div>	
 {% endblock %}

@@ -36,8 +36,20 @@
 <body>
 <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
 	<div class="container">
+		{% if session.logged_in %}
+		
 		{% block body %}
 		{% endblock %}
+		{% endif %}
+		{% if not session.logged_in %}
+		<div class="hero-unit">	
+			<p>Rural Housing Knowledge Network</p>	
+			<hr />
+			<a href="{{ url_for('login') }}">Please Login in to access this page</a>
+			{% block loginbody %}
+				{% endblock %}
+		</div>
+		{% endif %}
       <footer>
         <p>&copy; <a href="http://www.iitd.ac.in">Indian Institute Of Technology Delhi</a> 2012</p>
       </footer>
