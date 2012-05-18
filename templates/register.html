@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block css %}
+.container > .content{
+	background-color: #fff;
+	padding: 20px;
+	/* negative indent the amount of the padding to maintain the grid system */
+	margin: 0 -20px;
+	-webkit-border-radius: 0 0 6px 6px;
+	-moz-border-radius: 0 0 6px 6px;
+	border-radius: 0 0 6px 6px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+footer p
+{
+	text-align: center;
+}
+
+.newbody
+{
+	min-height: 200px
+}
+
+.heading
+{
+	text-align: center;
+}
+
+{% endblock %}
+{% block body %}
+
+	<div class="hero-unit">
+		
+		<a style="font-size: 16px;" href="{{ url_for('add_profile') }}">+ Add Profile</a> <a style="font-size: 16px;" >/</a>
+		<a style="font-size: 16px;" href="{{ url_for('logout') }}"> - Logout</a>
+		
+		<p class="heading">Rural Housing Knowledge Network</p>
+		<hr />
+		
+
+		<p>Create a new user</p>
+		<hr />
+		<form class="form" action="{{ url_for('register') }}" method="POST" >
+			<label>Username</label><input type="text" name="username" placeholder="Please enter a username or email" /><br />
+			<label>Password</label><input type="password" placeholder=" Please enter a password" name="password" /><br />
+			<label>Confirm password</labels><input type="password" placeholder=" Please confirm the new password" name="confirm" /><br />
+			<hr />
+			<button class="btn btn-primary" type="submit">Create User</button>
+			<button class="btn" type="reset">Reset</button>
+			<hr />
+		</form>	
+	</div>
+{% endblock %}

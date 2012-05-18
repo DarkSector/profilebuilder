@@ -94,9 +94,30 @@ def edit_profile(profilename):
 	"""docstring for edit_profile"""
 	return	render_template('edit.html')
 
-@app.route('/register')	
+@app.route('/register', methods=["POST","GET"])	
 def register():
 	"""docstring for register"""
+	if request.method == "POST":
+		username = request.form["username"]
+		#requires a username availability check later.
+		password = request.form["password"]
+		confirm = request.form["confirm"]
+		#print password
+		#print confirm
+		if confirm == password:
+			#proceed forward
+			passhash = generate_password_hash(password)
+			new_user = {'username':username, 'password':passhash}
+			check_insert = users.insert(new_user)
+			if check_insert:
+				#done and redirect
+				return redirect(url_for('show_profiles'))
+			else:
+				#not done and error occured
+				flash("For some reason it didn't work, try again")
+		else:
+			#dont proceed
+			flash("Please enter the password same twice")
 	return render_template('register.html')
 	
 	
@@ -108,8 +129,8 @@ def login():
 	if request.method == "POST":
 		accuser = request.form['username']
 		check_user = users.find_one({'username': accuser})
-		print check_user
-		print users.find_one()
+		#print check_user
+		#print users.find_one()
 		if check_user:
 			#now check for password
 			accpass = request.form['password']
