@@ -54,25 +54,6 @@ else:
 			break
 """
 
-#class newProfileBuilderForm(Form):
-#	"""Function used to create custom fields"""
-#	profileName = TextField('Name of the profile',validators=[Required()])
-#	typeProfile = SelectField(u'Type of Technology',
-#	choices=[('None','Click to select'),
-#			('roof','Roofing'),
-#			('wall','Walling'),
-#			('found','Foundation'),
-#			('misc', 'Miscellaneous')])
-#	remarks = TextAreaField('Starting remarks if any')
-#	submit = SubmitField('Submit Information')
-	
-#class loginForm(Form):
-#	"""docstring for loginForm"""
-#	username = TextField('Your username', validators=[Required()])
-#	password = PasswordField('Your Password', validators=[Required()])
-#	login = SubmitField('Login')
-
-	
 @app.route('/')
 def show_profiles():
 	"""docstring for show_profiles"""
@@ -85,8 +66,22 @@ def show_profiles():
 @app.route('/add',methods=["GET","POST"])
 def add_profile():
 	"""Add a new profile"""
-	#if request.method == "POST":
-	#	name = request.form['']
+	if request.method == "POST":
+		name = request.form['title']
+		unique = request.form['unique']
+		_type = request.form['profiletype']
+		profile = {'title':name, 'uniqute': unique, 'profiletype' : _type }
+		checkifAdded = profiles.insert(profile)
+		if checkifAdded:
+			#proceed to editing
+			#return redirect(url_for(''))
+			print "added yes okay"
+			print checkifAdded
+			pass
+		else:
+			flash("Not added")
+			print "not added"
+		#print name, unique, _type
 	return render_template('add.html')
 	
 @app.route('/edit')
