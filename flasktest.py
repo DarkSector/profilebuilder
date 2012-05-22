@@ -9,59 +9,42 @@
 
 from __future__ import with_statement
 
+import os
 import pymongo
 from pymongo import Connection
+from bson.objectid import ObjectId
 import pymongoconfig
 from flask import Flask, request, session, redirect, url_for, abort, \
-     render_template, flash
+     render_template, flash, g
 from flask.ext.bcrypt import bcrypt, generate_password_hash, check_password_hash
-from flask.ext.wtf import Form, TextField, TextAreaField, \
-	 PasswordField, SubmitField, Required, SelectField, ValidationError, \
-	 RadioField
+import flask_sijax
 
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
 
-temp_admin = 'rhknadmin123'
-temp_auth = 'clearancehash1'
-db_exists = False
-user_coll_exists = False
-
-#check if the database exists
-#then check if user base exists
+#initialize flask_sijax
+flask_sijax.Sijax(app)
 
 conn = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)
 dbobj = conn[pymongoconfig.MONGO_DATABASE]
 users = dbobj['accesslist']
 profiles = dbobj['profiles']
 
-"""
-try:
-	conn = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)
-	dbobj = conn[pymongoconfig.MONGO_DATABASE]
-except pymongo.errors.AutoReconnect:
-	unfortunate = True
-else:
-	unfortunate = False
-	for i in conn.database_names():
-		if i == pymongoconfig.MONGO_DATABASE:
-			db_exists = True
-			#check if userbase exists
-			for l in dbobj.collection_names():
-				if l == 'users':
-					user_coll_exists = True
-					break
-			break
-"""
-
 @app.route('/')
 def show_profiles():
-	"""docstring for show_profiles"""
-	#if not session.logged_in:
-	#	return redirect(url_for('login'))
-	#else:
-	#	return render_template('index.html')
-	return render_template('index.html')
+	allprofiles = profiles.find()
+	return render_template('index.html',profiles=allprofiles)
+	
+
+@flask_sijax.route(app,'/delete')
+def delete():
+	def delete_profile(obj_response, profile_id):
+		profiles.remove(ObjectId(profile_id))
+		
+	if g.sijax.is_sijax_request:
+		g.register_callback('delete_one',delete_profile)
+		return g.sijax.process_request()
+
 	
 @app.route('/add',methods=["GET","POST"])
 def add_profile():
@@ -70,18 +53,12 @@ def add_profile():
 		name = request.form['title']
 		unique = request.form['unique']
 		_type = request.form['profiletype']
-		profile = {'title':name, 'uniqute': unique, 'profiletype' : _type }
+		profile = {'title':name, 'unique': unique, 'profiletype' : _type }
 		checkifAdded = profiles.insert(profile)
 		if checkifAdded:
-			#proceed to editing
-			#return redirect(url_for(''))
-			print "added yes okay"
-			print checkifAdded
-			pass
+			return redirect(url_for('show_profiles'))
 		else:
-			flash("Not added")
-			print "not added"
-		#print name, unique, _type
+			flash("Not added, please try again")
 	return render_template('add.html')
 	
 @app.route('/edit')
@@ -89,28 +66,26 @@ def edit_404():
 	flash('Please select the profile you want to edit')
 	return redirect(url_for('show_profiles'))
 
-@app.route('/edit/<profilename>',methods=["GET","POST"])
-def edit_profile(profilename):
+@app.route('/edit/<profileid>',methods=["GET","POST"])
+def edit_profile(profileid):
 	"""docstring for edit_profile"""
-	return	render_template('edit.html')
+	profile_info = profiles.find_one(ObjectId(profileid))
+	if request.method == "POST":
+		pass
+	return	render_template('edit.html', profile_info=profile_info)
 
 @app.route('/register', methods=["POST","GET"])	
 def register():
 	"""docstring for register"""
 	if request.method == "POST":
 		username = request.form["username"]
-		#requires a username availability check later.
 		password = request.form["password"]
 		confirm = request.form["confirm"]
-		#print password
-		#print confirm
 		if confirm == password:
-			#proceed forward
 			passhash = generate_password_hash(password)
 			new_user = {'username':username, 'password':passhash}
 			check_insert = users.insert(new_user)
 			if check_insert:
-				#done and redirect
 				return redirect(url_for('show_profiles'))
 			else:
 				#not done and error occured
@@ -142,10 +117,9 @@ def login():
 				return redirect(url_for('show_profiles'))
 			else:
 				print "PASSWORD CHECK FAILED"
-				
 		else:
 			print "USERNAME", accuser ,"DOESN'T EXIST"
-	return render_template('login.html', error=error)
+	return render_template('login.html', error=error,loginpage=True)
 	
 @app.route('/logout')
 def logout():
