@@ -1,7 +1,6 @@
 #!/usr/bin/python
 """
-	Rural Housing Knowledge Networks - Database builder
-	
+	Rural Housing Knowledge Networks - Database builder	
 	Author: Pronoy Chopra
 	IIT Delhi
 	
@@ -22,29 +21,36 @@ import flask_sijax
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
 
+path = os.path.join('.',os.path.dirname(__file__), '../')
+
+app.config['SIJAX_STATIC_PATH'] = os.path.join('.',os.path.dirname(__file__), 'static/js/sijax')
+
 #initialize flask_sijax
 flask_sijax.Sijax(app)
 
-conn = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)
+conn = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)e
+
 dbobj = conn[pymongoconfig.MONGO_DATABASE]
 users = dbobj['accesslist']
 profiles = dbobj['profiles']
 
-@app.route('/')
-def show_profiles():
-	allprofiles = profiles.find()
-	return render_template('index.html',profiles=allprofiles)
+#@app.route('/',methods=["POST","GET"])
+#def show_profiles():
+#	allprofiles = profiles.find()
+#	return render_template('index.html',profiles=allprofiles)
 	
+@flask_sijax.route(app,'/')
+def show_profiles():
+	def delete_profile(obj_response, object_id):
+		profiles.remove(ObjectId(object_id))
 
-@flask_sijax.route(app,'/delete')
-def delete():
-	def delete_profile(obj_response, profile_id):
-		profiles.remove(ObjectId(profile_id))
-		
 	if g.sijax.is_sijax_request:
-		g.register_callback('delete_one',delete_profile)
+		g.sijax.register_callback('delete_this',delete_profile)
 		return g.sijax.process_request()
-
+		
+	allprofiles = profiles.find()
+	return render_template('index.html', profiles=allprofiles)
+	
 	
 @app.route('/add',methods=["GET","POST"])
 def add_profile():
