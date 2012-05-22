@@ -1,4 +1,11 @@
 {% extends "layout.html" %}
+{% block js %}
+	<script type="text/javascript"
+	    src="/static/js/sijax/sijax.js"></script>
+		<script type="text/javascript">
+		    {{ g.sijax.get_js()|safe }}
+		</script>
+{% endblock %}
 {% block css %}
 .container > .content{
 	background-color: #fff;
@@ -54,7 +61,7 @@ footer p
 				<tr>
 					<td>{{ profile._id }}</td>
 					<td>{{ profile.title }} / {{ profile.unique }}</td>
-					<td><a href="/edit/{{ profile._id}}">Edit</a> / <a href="javascript://" onclick="Sijax.request('delete_one', {{ profile._id }} );">Delete</a></td>
+					<td><a href="/edit/{{ profile._id}}">Edit</a> / <a href="javascript://" onclick="Sijax.request('delete_this', [ '{{ profile._id }}' ] );">Delete</a></td>
 				</tr>
 				{% endfor %}	
 			</tbody>
