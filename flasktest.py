@@ -32,7 +32,7 @@ conn = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)
 dbobj = conn[pymongoconfig.MONGO_DATABASE]
 users = dbobj['accesslist']
 profiles = dbobj['profiles']		
-		
+
 @flask_sijax.route(app,'/')
 def show_profiles():
 	def delete_profile(obj_response,object_id):
@@ -113,16 +113,13 @@ def login():
 		check_user = users.find_one({'username': accuser})
 		if check_user:
 			accpass = request.form['password']
-			
 			check_pass = check_password_hash(check_user['password'],accpass)
 			if check_pass:
 				session['logged_in'] = True
 				return redirect(url_for('show_profiles'))
 			else:
-				flash("Incorrect username or password")
-				
+				flash("Incorrect username or password")				
 		else:
-			#print "USERNAME", accuser ,"DOESN'T EXIST"
 			flash("Incorrect username or password")
 	return render_template('login.html', error=error,loginpage=True)
 	
@@ -134,4 +131,4 @@ def logout():
 	return redirect(url_for('show_profiles'))
 	
 if __name__ == "__main__":
-	app.run()
+	app.run('0.0.0.0')
