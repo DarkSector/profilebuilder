@@ -28,22 +28,20 @@ app.config['SIJAX_STATIC_PATH'] = os.path.join('.',os.path.dirname(__file__), 's
 #initialize flask_sijax
 flask_sijax.Sijax(app)
 
-conn = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)e
+conn = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)
 
 dbobj = conn[pymongoconfig.MONGO_DATABASE]
 users = dbobj['accesslist']
-profiles = dbobj['profiles']
-
-#@app.route('/',methods=["POST","GET"])
-#def show_profiles():
-#	allprofiles = profiles.find()
-#	return render_template('index.html',profiles=allprofiles)
-	
+profiles = dbobj['profiles']		
+		
 @flask_sijax.route(app,'/')
 def show_profiles():
-	def delete_profile(obj_response, object_id):
+	def delete_profile(obj_response,object_id):
+		"""docstring for delete_profile"""
 		profiles.remove(ObjectId(object_id))
-
+		div_id =  '"#' + object_id + '"'
+		return obj_response.script('$('+div_id+').remove();')
+	
 	if g.sijax.is_sijax_request:
 		g.sijax.register_callback('delete_this',delete_profile)
 		return g.sijax.process_request()
@@ -100,31 +98,27 @@ def register():
 			#dont proceed
 			flash("Please enter the password same twice")
 	return render_template('register.html')
-	
-	
+		
 @app.route('/login', methods=["GET","POST"])
 def login():
 	"""docstring for login"""
-	#loginform = loginForm(request.form)
 	error = None
 	if request.method == "POST":
 		accuser = request.form['username']
 		check_user = users.find_one({'username': accuser})
-		#print check_user
-		#print users.find_one()
 		if check_user:
-			#now check for password
 			accpass = request.form['password']
 			
-			#prepasshash = 
 			check_pass = check_password_hash(check_user['password'],accpass)
 			if check_pass:
 				session['logged_in'] = True
 				return redirect(url_for('show_profiles'))
 			else:
-				print "PASSWORD CHECK FAILED"
+				flash("Incorrect username or password")
+				
 		else:
-			print "USERNAME", accuser ,"DOESN'T EXIST"
+			#print "USERNAME", accuser ,"DOESN'T EXIST"
+			flash("Incorrect username or password")
 	return render_template('login.html', error=error,loginpage=True)
 	
 @app.route('/logout')
