@@ -58,7 +58,7 @@ footer p
 			</thead>	
 			<tbody>
 				{% for profile in profiles %}
-				<tr>
+				<tr id="{{ profile._id }}">
 					<td>{{ profile._id }}</td>
 					<td>{{ profile.title }} / {{ profile.unique }}</td>
 					<td><a href="/edit/{{ profile._id}}">Edit</a> / <a href="javascript://" onclick="Sijax.request('delete_this', [ '{{ profile._id }}' ] );">Delete</a></td>
