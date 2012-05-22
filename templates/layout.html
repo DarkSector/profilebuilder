@@ -37,17 +37,23 @@
 <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
 	<div class="container">
 		{% if session.logged_in %}
-		
-		{% block body %}
-		{% endblock %}
+				<a style="font-size: 16px;" href="{{ url_for('show_profiles') }}">+ Show all profiles</a><br />
+				<a style="font-size: 16px;" href="{{ url_for('add_profile') }}">+ Add Profile</a><br />
+				<a style="font-size: 16px;" href="{{ url_for('logout') }}"> - Logout</a>
+
+				{% block body %}
+				{% endblock %}
+				
 		{% endif %}
+		
 		{% if not session.logged_in %}
 		<div class="hero-unit">	
-			<p>Rural Housing Knowledge Network</p>	
+			<p style="text-align: center">Rural Housing Knowledge Network</p>
 			<hr />
-			<a href="{{ url_for('login') }}">Please Login in to access this page</a>
+			{% if not loginpage %}
+			<a href="{{ url_for('login') }}">Please Login in to access this page</a>	{% endif %}
 			{% block loginbody %}
-				{% endblock %}
+			{% endblock %}
 		</div>
 		{% endif %}
       <footer>
@@ -56,7 +62,7 @@
 
     </div> <!-- /container -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>
+<script>window.jQuery || document.write('<script src="/static/js/libs/jquery-1.7.1.min.js"><\/script>')</script>
 
 <script src="{{ url_for('static', filename='js/libs/bootstrap/transition.js') }}"></script>
 <script src="{{ url_for('static', filename='js/libs/bootstrap/collapse.js') }} "></script>
