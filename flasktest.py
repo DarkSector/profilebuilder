@@ -11,7 +11,7 @@ from __future__ import with_statement
 import os
 import pymongo
 from pymongo import Connection
-from bson.objectid import ObjectId
+from bson.objectid import ObjectId, InvalidId
 import pymongoconfig
 from flask import Flask, request, session, redirect, url_for, abort, \
      render_template, flash, g
@@ -29,7 +29,6 @@ app.config['SIJAX_STATIC_PATH'] = os.path.join('.',os.path.dirname(__file__), 's
 flask_sijax.Sijax(app)
 
 conn = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)
-
 dbobj = conn[pymongoconfig.MONGO_DATABASE]
 users = dbobj['accesslist']
 profiles = dbobj['profiles']		
@@ -73,7 +72,13 @@ def edit_404():
 @app.route('/edit/<profileid>',methods=["GET","POST"])
 def edit_profile(profileid):
 	"""docstring for edit_profile"""
-	profile_info = profiles.find_one(ObjectId(profileid))
+	try:
+		profile_info = profiles.find_one(ObjectId(profileid))
+	except InvalidId:
+		flash("No such profile exists, are you sure you have the right link")
+		return redirect(url_for('show_profiles'))
+	else:
+		profile_info = profile_info
 	if request.method == "POST":
 		pass
 	return	render_template('edit.html', profile_info=profile_info)
