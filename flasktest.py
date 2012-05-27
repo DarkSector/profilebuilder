@@ -36,7 +36,12 @@ profiles = dbobj['profiles']
 @flask_sijax.route(app,'/')
 def show_profiles():
 	def delete_profile(obj_response,object_id):
-		"""docstring for delete_profile"""
+		"""
+		The delete_profile function is called along with passing a 
+		correct ObjectId as object_id. 
+		
+		The corrosponding table row is removed simultaneously
+		"""
 		profiles.remove(ObjectId(object_id))
 		div_id =  '"#' + object_id + '"'
 		return obj_response.script('$('+div_id+').remove();')
@@ -49,7 +54,7 @@ def show_profiles():
 	return render_template('index.html', profiles=allprofiles)
 	
 	
-@app.route('/add',methods=["GET","POST"])
+@app.route('/addprofile',methods=["GET","POST"])
 def add_profile():
 	"""Add a new profile"""
 	if request.method == "POST":
@@ -63,29 +68,71 @@ def add_profile():
 		else:
 			flash("Not added, please try again")
 	return render_template('add.html')
+
+@flask_sijax.route(app,'/addtags')
+def addtags():
+	def addnewtags(obj_response, tag):
+		pass
+	def deletetags(obj_response, tag):
+		pass
+	if g.sijax.is_sijax_request:
+		g.sijax.register_callback('delete_tag', deletetags)
+		g.sijax.register_callback('add_new', addnewtags)
+		return g.sijax.process_request()
+	
+	return render_template('panel.html')
 	
 @app.route('/edit')
 def edit_404():
 	flash('Please select the profile you want to edit')
 	return redirect(url_for('show_profiles'))
 
-@app.route('/edit/<profileid>',methods=["GET","POST"])
+@flask_sijax.route(app,'/edit/<profileid>')
 def edit_profile(profileid):
-	"""docstring for edit_profile"""
+	"""
+	The profile has to be edited. The following page allows following 
+	functions to be executed:
+	
+	1. Edit existing data
+	2. Add new fields and data
+	3. Create media gallery
+	4. Edit proper paragraphs with media in them.
+	5. delete fields
+	"""
 	try:
+		"""
+		The profileid may not be a valid ObjectId, if it's not a valid
+		ObjectId, user must get routed to main page. 
+		"""
 		profile_info = profiles.find_one(ObjectId(profileid))
 	except InvalidId:
+		"""
+		Flash message and route to main page
+		"""
 		flash("No such profile exists, are you sure you have the right link")
 		return redirect(url_for('show_profiles'))
 	else:
 		profile_info = profile_info
-	if request.method == "POST":
+		"""
+		Gets the profile information and puts it into profile_info dict
+		"""
+		
+	def add_data(obj_response, data):
+		pass	
+	def edit_data(obj_response, data):
 		pass
+	
+		
 	return	render_template('edit.html', profile_info=profile_info)
+
 
 @app.route('/register', methods=["POST","GET"])	
 def register():
-	"""docstring for register"""
+	"""
+	An admin user already logged is allowed to register new usernames
+	the new usernames cannot be changed at the moment nor can they be
+	deleted unless done from command line
+	"""
 	if request.method == "POST":
 		username = request.form["username"]
 		password = request.form["password"]
@@ -106,7 +153,7 @@ def register():
 		
 @app.route('/login', methods=["GET","POST"])
 def login():
-	"""docstring for login"""
+	"""User logging in function"""
 	error = None
 	if request.method == "POST":
 		accuser = request.form['username']
@@ -129,6 +176,7 @@ def logout():
 	session.pop('logged_in', None)
 	flash('logged out')
 	return redirect(url_for('show_profiles'))
-	
+
+#Run application on 0.0.0.0:5000	
 if __name__ == "__main__":
 	app.run('0.0.0.0')
