@@ -10,7 +10,6 @@
 	<title>Rural Housing Knowledge Networks</title>
 	<meta name="description" content="Profile Builder">
 	<meta name="author" content="Pronoy Chopra">
-
 	<meta name="viewport" content="width=device-width">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }} ">
 	<style>
@@ -36,7 +35,7 @@
 				<a style="font-size: 16px;" href="{{ url_for('show_profiles') }}">+ Show all profiles</a><br />
 				<a style="font-size: 16px;" href="{{ url_for('add_profile') }}">+ Add Profile</a><br />
 				<a style="font-size: 16px;" href="{{ url_for('logout') }}"> - Logout</a>
-
+<hr />
 				{% block body %}
 				{% endblock %}
 				
@@ -57,18 +56,18 @@
       </footer>
 
     </div> <!-- /container -->
-<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
-<script src="/static/js/libs/jquery-1.7.1.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<!-- <script src="/static/js/libs/jquery-1.7.1.min.js"></script> -->
 <script>window.jQuery || document.write('<script src="/static/js/libs/jquery-1.7.1.min.js"><\/script>')</script>
 
 {% block js %}
 {% endblock %}
 
 
-<script src="{{ url_for('static', filename='js/libs/bootstrap/transition.js') }}"></script>
-<script src="{{ url_for('static', filename='js/libs/bootstrap/collapse.js') }} "></script>
-<script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
-<script src="{{ url_for('static', filename='js/script.js')}}"></script>
+<!-- <script src="{{ url_for('static', filename='js/libs/bootstrap/transition.js') }}"></script>
+<script src="{{ url_for('static', filename='js/libs/bootstrap/collapse.js') }} "></script> -->
+ <script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
+<!-- <script src="{{ url_for('static', filename='js/script.js')}}"></script>-->
 
 </body>
 </html>
