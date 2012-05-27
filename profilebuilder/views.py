@@ -9,8 +9,9 @@ from flask import Flask, request, session, redirect, url_for, abort, \
      render_template, flash, g
 from flask.ext.bcrypt import bcrypt, generate_password_hash, check_password_hash
 import flask_sijax
-from profilebuilder import conn, dbobj, users, profiles
 
+from profilebuilder import conn, dbobj, users, profiles
+from profilebuilder import app
 
 @flask_sijax.route(app,'/')
 def show_profiles():
@@ -122,7 +123,7 @@ def register():
 			else:
 				#not done and error occured
 				flash("For some reason it didn't work, try again")
-			else:
+		else:
 			#dont proceed
 			flash("Please enter the password same twice")
 	return render_template('register.html')

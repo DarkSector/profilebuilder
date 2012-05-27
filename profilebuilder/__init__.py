@@ -28,10 +28,11 @@ app.config['SIJAX_STATIC_PATH'] = os.path.join('.',os.path.dirname(__file__), 's
 #initialize flask_sijax
 flask_sijax.Sijax(app)
 
+#pymongo connections
 conn = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)
 dbobj = conn[pymongoconfig.MONGO_DATABASE]
 users = dbobj['accesslist']
 profiles = dbobj['profiles']
 
-
+#third level imports
 import profilebuilder.views
