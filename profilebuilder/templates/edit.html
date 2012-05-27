@@ -47,42 +47,38 @@ footer p
 	
 	<p>Unique ID: {{ profile_info._id }}</p>
 	<div id="editingstage">
-	<form action="" method="POST">
+
 		<table class="table table-striped table-condensed">
 			<colgroup>
 				<col class="span2">
 				<col class="span2">
-				<col class="span3">
+
 			</colgroup>
 			<tbody>
 				<tr>
 					<td>Profile name</td>
 					<td>{{ profile_info.title }}</td>
-					<td><input
-					 type="text" placeholder="Type a new name here" /></td>
+					
 				</tr>
 				<tr>
 					<td>Unique title</td>
 					<td>{{ profile_info.unique }}</td>
-					<td><input
-					 type="text" placeholder="Type a new unique title here" /></td>
+					
 				</tr>
 				<tr>
 					<td>Profile category</td>
 					<td>{{ profile_info.profiletype }}</td>
-					<td><input
-					 type="text" placeholder="Type new category here" /></td>
+					
 				</tr>	
 			</tbody>	
 		</table>
-				<hr />
-		<button type="submit" class="btn btn-primary">Save changes</button>
-		</form>
-		<hr />
-				<a class="btn " href="">Refresh</a>
+		
+		<a class="btn " href="">Refresh</a>
 		<hr />		
 		<form id="newDataForm" name="newDataForm">	
+			<label>Key:</label>
 			<input type="text" name="key" placeholder="Heading here" /><br />
+			<label>Value:</label>
 			<textarea rows="7" class="span9" placeholder="Your content here"></textarea><br />
 			<input class="btn btn-success" type="submit" />
 		</form>
