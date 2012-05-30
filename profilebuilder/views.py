@@ -10,8 +10,9 @@ from flask import Flask, request, session, redirect, url_for, abort, \
 from flask.ext.bcrypt import bcrypt, generate_password_hash, check_password_hash
 import flask_sijax
 
-from profilebuilder import conn, dbobj, users, profiles
+from profilebuilder import conn, dbobj, users, profiles, types
 from profilebuilder import app
+
 
 @flask_sijax.route(app,'/')
 def show_profiles():
@@ -33,33 +34,53 @@ def show_profiles():
 	allprofiles = profiles.find()
 	return render_template('index.html', profiles=allprofiles)
 	
-@app.route('/addprofile',methods=["GET","POST"])
+@flask_sijax.route(app,'/addprofile')
 def add_profile():
-	"""Add a new profile"""
-	if request.method == "POST":
-		name = request.form['title']
-		unique = request.form['unique']
-		_type = request.form['profiletype']
+	"""
+	These functions handle profile adding
+	"""
+	def newprofile_handler(obj_response,name,unique,_type):
+		"""
+		name: is the profile title
+		unique: is the unique title that will go into the url
+		_type: is the type of the profile
+		"""
+		#for debug
+		#print name, unique, _type
+		
+		#create a profile dict
 		profile = {'title':name, 'unique': unique, 'profiletype' : _type }
+		
+		#add the profile into the profiles
 		checkifAdded = profiles.insert(profile)
+		
+		#check if the profile is added
 		if checkifAdded:
-			return redirect(url_for('show_profiles'))
+			return obj_response.alert('Added a new profile, you can now add another one.')
+		#if the profile is not added
 		else:
-			flash("Not added, please try again")
-	return render_template('add.html')
+			return obj_response.alert("Not added, please try again")
 	
-@flask_sijax.route(app,'/addtags')
-def addtags():
-	def addnewtags(obj_response, tag):
-		pass
-	def deletetags(obj_response, tag):
-		pass
+	def newtype_handler(obj_response,profilevalue):
+		"""
+		
+		"""
+		#debug
+		#print profilevalue
+		
+		#insert type of profile
+		types.insert({'name':profilevalue})
+		
+		return obj_response.alert('Added a new profile type :' + profilevalue), obj_response.script('$("#profileselect").append("<option value=' + profilevalue + '>' + profilevalue + '</option>")')
+		
+			
 	if g.sijax.is_sijax_request:
-		g.sijax.register_callback('delete_tag', deletetags)
-		g.sijax.register_callback('add_new', addnewtags)
-		return g.sijax.process_request()
-
-	return render_template('panel.html')
+			g.sijax.register_callback('save_profiletype',newtype_handler)
+			g.sijax.register_callback('save_newprofile', newprofile_handler)	
+			return g.sijax.process_request()
+			
+	typeofprofiles = types.find()
+	return render_template('add.html', profiletypes=typeofprofiles)
 	
 @app.route('/edit')
 def edit_404():
