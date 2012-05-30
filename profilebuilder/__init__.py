@@ -33,6 +33,7 @@ conn = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)
 dbobj = conn[pymongoconfig.MONGO_DATABASE]
 users = dbobj['accesslist']
 profiles = dbobj['profiles']
+types = dbobj['profiletypes']
 
 #third level imports
 import profilebuilder.views
