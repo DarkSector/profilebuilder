@@ -29,32 +29,83 @@ footer p
 }
 
 {% endblock %}
+
+{% block js %}
+<script type="text/javascript"
+    src="/static/js/sijax/sijax.js"></script>
+	<script type="text/javascript">
+	    {{ g.sijax.get_js()|safe }}
+	</script>
+
+<script src="{{ url_for('static', filename='js/libs/bootstrap/transition.js') }}"></script>
+<script src="{{ url_for('static', filename='js/libs/bootstrap/modal.js') }}"></script>
+
+<script type="text/javascript">
+$(function() {          
+    $('#newprofiletypeform').bind('submit', function() {
+        Sijax.request('save_profiletype', [$('#profilefield').attr('value')]);
+
+        //Prevent the form from being submitted
+        return false;
+		$('#profilefield').focus();
+    });
+
+	$('#addnewprofileform').bind('submit', function(){
+		Sijax.request('save_newprofile', [$('#profiletitle').attr('value'),$('#uniquetitle').attr('value'), $('#profileselect').attr('value') ]);
+		return false;
+	});
+    
+});
+</script>
+{% endblock %}
+
 {% block body %}
 <div class="hero-unit">
 
-	
 	<p class="heading">Rural Housing Knowledge Network</p>
 	<hr />
-
-	<form class="form" action="{{ url_for('add_profile') }}" method="POST">
-		<label>Title:</label><input type="text" placeholder="Please enter a suitable title" class="span5"  name="title"/><br />
+	
+	<!-- form to add a new profile -->
+	<form class="form" id="addnewprofileform">
+		<label>Title:</label>
+		<input type="text" placeholder="Please enter a suitable title" class="span5" id="profiletitle" name="title"/><br />
 		<label>Unique Title:</label>
-		<input type="text" placeholder="A unique title to appear in the url" class="span5"  name="unique"/><br />
+		<input type="text" placeholder="A unique title to appear in the url" class="span5" id="uniquetitle" name="unique"/><br />
 		<label>Select type of profile</label>
-		<select name="profiletype" class="span5">
+		<select id="profileselect" name="profiletype" class="span5">
 			<option value="None">Click to Select</option>
-			<option value="roofing">Roofing</option>
-			<option value="walling">Walling</option>
-			<option value="foundation">Foundation</option>
-			<option value="misc">Misc</option>
-		</select><br />
+			{% for ptype in profiletypes %}
+			<option value="{{ ptype.name }}">{{ ptype.name }}</option>
+			{% endfor %}
+		</select>&nbsp; &nbsp;<a href="#addType" data-toggle="modal" >Profile type management</a><br />
 		<hr />
 		<button type="submit" class="btn btn-primary">Submit profile details »</button>
 		<button type="reset" class="btn">Reset / Cancel</button>
 		<hr />
 		<small>Once the profile is added, you can add the content in the edit section. You will be redirected to the edit section once you hit submit.</small><br /><br />
 		<a href="{{ url_for('show_profiles') }}">See all profiles?</a>
-	</form>
+	</form>	
+	<!-- ends the add new profile form -->
+</div>
+	
+<div class="modal fade hide " id="addType" >
+	<div class="modal-header">
+	<a class="close" data-dismiss="modal">&times;</a>
+	<h3>Add a new profile type</h3>
+	</div>
+	<div class="modal-body">
+		
+		<form id="newprofiletypeform" name="newprofiletypeform">
+			<input type="text" id="profilefield" placeholder="Enter the name of the profile type" />
+			<p>Example: Roofing, Foundation, etc.</p>
 
-</div>	
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-danger" class="close" data-dismiss="modal">Close</button>
+		<button class="btn btn-primary" value="send" type="submit">Add</button>
+		</form>	
+	</div>
+</div><!-- modal ends -->
+
+
 {% endblock %}
