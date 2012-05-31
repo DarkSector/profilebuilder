@@ -122,7 +122,6 @@ def edit_profile(profileid):
 	def edit_data(obj_response, data):
 		pass
 	
-		
 	return	render_template('edit.html', profile_info=profile_info)
 
 
