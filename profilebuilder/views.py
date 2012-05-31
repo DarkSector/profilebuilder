@@ -116,10 +116,20 @@ def edit_profile(profileid):
 		Gets the profile information and puts it into profile_info dict
 		"""
 
-	def add_data(obj_response, data):
-		pass	
-	def edit_data(obj_response, data):
-		pass
+	def editdata_handler(obj_response, data_key, data_value):
+		if data_key == "" or data_value == "":
+			return obj_response.alert("Value ready to put in, please close this dialog box and insert again")
+		else:
+			current_profile = profiles.find_one(ObjectId(profileid))
+			current_profile[data_key] = data_value
+			profiles.save(current_profile)
+			return obj_response.alert("value stored")
+		#foo = str(current_profile)
+		#return obj_response.alert(foo)
+	
+	if g.sijax.is_sijax_request:
+			g.sijax.register_callback('save_editdata',editdata_handler)
+			return g.sijax.process_request()
 		
 	return	render_template('edit.html', profile_info=profile_info)
 
