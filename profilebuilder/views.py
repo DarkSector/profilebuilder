@@ -9,7 +9,6 @@ from flask import Flask, request, session, redirect, url_for, abort, \
      render_template, flash, g
 from flask.ext.bcrypt import bcrypt, generate_password_hash, check_password_hash
 import flask_sijax
-
 from profilebuilder import conn, dbobj, users, profiles, types
 from profilebuilder import app
 
@@ -184,3 +183,15 @@ def logout():
 	session.pop('logged_in', None)
 	flash('logged out')
 	return redirect(url_for('show_profiles'))
+
+@app.route('/view/profile/<uniquename>')
+def render_techprofile(uniquename):
+	pass
+
+@app.route('/view/professional/<proname>')
+def render_profprofile(proname):
+	pass
+
+@app.route('/view/org/<orgname>')
+def render_orgprofile(orgname):
+	pass

@@ -1,4 +1,3 @@
-
 	tinyMCE.init({
 			content_css: "/static/css/bootstrap.css",
 			theme: "advanced",

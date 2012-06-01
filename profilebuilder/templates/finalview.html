@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block js %}
+	<script type="text/javascript"
+	    src="/static/js/sijax/sijax.js"></script>
+		<script type="text/javascript">
+		    {{ g.sijax.get_js()|safe }}
+		</script>
+{% endblock %}
+{% block css %}
+.container > .content{
+	background-color: #fff;
+	padding: 20px;
+	/* negative indent the amount of the padding to maintain the grid system */
+	margin: 0 -20px;
+	-webkit-border-radius: 0 0 6px 6px;
+	-moz-border-radius: 0 0 6px 6px;
+	border-radius: 0 0 6px 6px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+footer p
+{
+	text-align: center;
+}
+
+.newbody
+{
+	min-height: 200px
+}
+
+.heading
+{
+	text-align: center;
+}
+
+{% endblock %}
+{% block body %}
+<div class="newbody">
+	<div class="hero-unit">
+	
+		<p class="heading">Rural Housing Knowledge Network</p>
+		<hr />
+
+		<p>Profiles in database</p>
+		<table class="table table-striped table-condensed">
+			<colgroup>
+				<col class="span1">
+				<col class="span5">
+				<col class="span2">
+			</colgroup>
+			<thead>
+				<th>#</th>
+				<th>Name / Unique title</th>
+				<th>Options</th>
+			</thead>	
+			<tbody>
+				{% for profile in profiles %}
+				<tr id="{{ profile._id }}">
+					<td>{{ profile._id }}</td>
+					<td>{{ profile.title }} / {{ profile.unique }}</td>
+					<td><a href="/edit/{{ profile._id}}">Edit</a> / <a href="javascript://" onclick="Sijax.request('delete_this', [ '{{ profile._id }}' ] );">Delete</a></td>
+				</tr>
+				{% endfor %}	
+			</tbody>
+		</table>
+		
+	</div>
+
+		
+
+</div>	
+{% endblock %}
