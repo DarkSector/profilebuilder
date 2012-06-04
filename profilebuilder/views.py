@@ -55,7 +55,7 @@ def add_profile():
 		
 		#check if the profile is added
 		if checkifAdded:
-			return obj_response.script("$('#profileaddsuccess').show()")
+			return obj_response.script("$('#profileaddsuccess').show()"),obj_response.script('$("#addnewprofileform").reset()')
 		else:
 			return obj_response.script("$('#profileaddfail').show()")
 	

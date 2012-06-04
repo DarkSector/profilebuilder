@@ -57,6 +57,11 @@ $(function() {
     
 });
 </script>
+<script>
+	jQuery.fn.reset = function () {
+	  $(this).each (function() { this.reset(); });
+	}
+</script>
 {% endblock %}
 
 {% block body %}
