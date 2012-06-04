@@ -24,7 +24,7 @@ def show_profiles():
 		"""
 		profiles.remove(ObjectId(object_id))
 		div_id =  '"#' + object_id + '"'
-		return obj_response.script('$('+div_id+').remove();')
+		return obj_response.script('$('+div_id+').remove();'), obj_response.script("$('#profiledelete').show()")
 	
 	if g.sijax.is_sijax_request:
 		g.sijax.register_callback('delete_this',delete_profile)
@@ -55,10 +55,10 @@ def add_profile():
 		
 		#check if the profile is added
 		if checkifAdded:
-			return obj_response.alert('Added a new profile, you can now add another one.')
+			return obj_response.script("$('#profileaddsuccess').show()")
 		#if the profile is not added
 		else:
-			return obj_response.alert("Not added, please try again")
+			return obj_response.script("$('#profileaddfail').show()")
 	
 	def newtype_handler(obj_response,profilevalue):
 		"""
@@ -70,7 +70,8 @@ def add_profile():
 		#insert type of profile
 		types.insert({'name':profilevalue})
 		
-		return obj_response.alert('Added a new profile type :' + profilevalue), obj_response.script('$("#profileselect").append("<option value=' + profilevalue + '>' + profilevalue + '</option>")')
+		#return obj_response.script('Added a new profile type :' + profilevalue), obj_response.script('$("#profileselect").append("<option value=' + profilevalue + '>' + profilevalue + '</option>")')
+		return obj_response.script("$('#addType').modal('toggle')"),obj_response.script("$('#profiletypeaddsuccess').show()"),obj_response.script('$("#profileselect").append("<option value=' + profilevalue + '>' + profilevalue + '</option>")')
 		
 			
 	if g.sijax.is_sijax_request:
@@ -184,14 +185,26 @@ def logout():
 	flash('logged out')
 	return redirect(url_for('show_profiles'))
 
-@app.route('/view/profile/<uniquename>')
-def render_techprofile(uniquename):
-	pass
 
-@app.route('/view/professional/<proname>')
-def render_profprofile(proname):
-	pass
+@app.route('/view/profile/<_id>')
+def render_techprofile(_id):
+	#try:
+	#	profileinfo = profiles.find(ObjectId(_id))
+	#except InvalidId:
+	#	flash("No such profile found")
+	
+	profileinfo = profiles.find_one(ObjectId(_id))
+	return render_template('finalview.html', profileinfo=profileinfo)
 
-@app.route('/view/org/<orgname>')
-def render_orgprofile(orgname):
-	pass
+
+#@app.route('/view/profile/<uniquename>')
+#def render_techprofile(uniquename):
+#	pass
+
+#@app.route('/view/professional/<proname>')
+#def render_profprofile(proname):
+#	pass
+
+#@app.route('/view/org/<orgname>')
+#def render_orgprofile(orgname):
+#	pass
