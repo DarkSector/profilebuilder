@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "publiclayout.html" %}
 {% block js %}
 	<script type="text/javascript"
 	    src="/static/js/sijax/sijax.js"></script>
@@ -36,39 +36,13 @@ footer p
 }
 
 {% endblock %}
+
 {% block body %}
-<div class="newbody">
-	<div class="hero-unit">
-	
-		<p class="heading">Rural Housing Knowledge Network</p>
-		<hr />
-
-		<p>Profiles in database</p>
-		<table class="table table-striped table-condensed">
-			<colgroup>
-				<col class="span1">
-				<col class="span5">
-				<col class="span2">
-			</colgroup>
-			<thead>
-				<th>#</th>
-				<th>Name / Unique title</th>
-				<th>Options</th>
-			</thead>	
-			<tbody>
-				{% for profile in profiles %}
-				<tr id="{{ profile._id }}">
-					<td>{{ profile._id }}</td>
-					<td>{{ profile.title }} / {{ profile.unique }}</td>
-					<td><a href="/edit/{{ profile._id}}">Edit</a> / <a href="javascript://" onclick="Sijax.request('delete_this', [ '{{ profile._id }}' ] );">Delete</a></td>
-				</tr>
-				{% endfor %}	
-			</tbody>
-		</table>
-		
-	</div>
-
-		
-
-</div>	
+{% autoescape false %}
+<div class="public">
+	{% for profile in profileinfo.keys() %}
+		<p>{{ profile }}: {{ profileinfo[profile] }} </p>
+	{% endfor %}
+</div>
+{% endautoescape %}	
 {% endblock %}
