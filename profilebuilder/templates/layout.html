@@ -33,7 +33,7 @@
 	<div class="container">
 		{% if session.logged_in %}
 				<a style="font-size: 16px;" href="{{ url_for('show_profiles') }}">+ Show all profiles</a><br />
-				<a style="font-size: 16px;" href="{{ url_for('add_profile') }}">+ Add Profile</a><br />
+				<a style="font-size: 16px;" href="{{ url_for('check_pro') }}">+ Add Profile</a><br />
 				<a style="font-size: 16px;" href="{{ url_for('logout') }}"> - Logout</a>
 <hr />
 				{% block body %}
