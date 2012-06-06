@@ -1,14 +1,21 @@
 {% extends "layout.html" %}
 {% block js %}
-	<script type="text/javascript"
-	    src="/static/js/sijax/sijax.js"></script>
-		<script type="text/javascript">
+<script type="text/javascript"
+    src="/static/js/sijax/sijax.js">
+</script>
+
+<script type="text/javascript">
 		    {{ g.sijax.get_js()|safe }}
-		</script>
-	<script src="{{ url_for('static', filename='js/libs/bootstrap/modal.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/libs/bootstrap/transition.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/libs/bootstrap/alert.js') }}"></script>
+</script>
+
+<script src="{{ url_for('static', filename='js/libs/bootstrap/modal.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/libs/bootstrap/transition.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/libs/bootstrap/alert.js') }}"></script>
+
 {% endblock %}
+
 {% block css %}
 .container > .content{
 	background-color: #fff;
@@ -39,16 +46,17 @@ footer p
 }
 
 {% endblock %}
+
 {% block body %}
 
 <div class="newbody">
 
-<div class="alerts">	
-	<div id="profiledelete" class="alert alert-block hide fade in" data-alert="alert">
-		<a class="close" data-dismiss="alert">&times;</a>
-		<p><strong>Success!</strong> Deleted the said profile.</p>
+	<div class="alerts">	
+		<div id="profiledelete" class="alert alert-block hide fade in" data-alert="alert">
+			<a class="close" data-dismiss="alert">&times;</a>
+			<p><strong>Success!</strong> Deleted the said profile.</p>
+		</div>
 	</div>
-</div>
 
 	
 	<div class="hero-unit">
@@ -92,7 +100,14 @@ footer p
 						<!-- modal ends -->
 					</td>
 				</tr>
-				{% endfor %}	
+				{% endfor %}
+				
+				<tr id="{{ pro._id }}">
+					<td><a href="/view/profile/prof/{{ pro._id }}">{{ pro._id	}}</a>
+					<td>{{ pro.name	 }} / {{ pro.orgtype }}</td>
+					<td><a href="/edit/{{ pro._id}}">Edit</a> / <!-- <a href="javascript://" onclick="Sijax.request('delete_this', [ '{{ profile._id }}' ] );">Delete</a>--><a href="#deletepro{{ pro._id }}" data-toggle="modal">Delete</a>	
+				</tr>		
+				
 			</tbody>
 		</table>
 	
