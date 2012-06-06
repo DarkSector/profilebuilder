@@ -65,6 +65,7 @@ $(function() {
 {% endblock %}
 
 {% block body %}
+{% if not professional %}
 <div class="alerts">
 	<div id="profiletypeaddsuccess" class="alert alert-block alert-success hide fade in" data-alert="alert">
 		<a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -131,4 +132,60 @@ $(function() {
 </div><!-- modal ends -->
 
 
+{% else %}
+
+
+
+
+<div class="hero-unit">
+	<div class="heading">
+		<p>Rural Housing Knowledge Network</p>
+		<hr />
+		<p>Add a professional profile</p>
+	</div>
+	<form>
+		<label>Please select type of professional profile:</label>
+		<select id="professionalselect" name="profiletype" class="span5">
+			<option value="Organization">Organization</option>
+			<option value="Professional">Professional/Individual</option>
+		</select>
+		<label>Please enter the name</label>
+		<input type="text" class="span8" placeholder="Name of Professional/Organization" />
+		<label>Summary</label>
+		<textarea rows="15" class="span8" placeholder="Please provide with a brief summary of the professional or organization"></textarea>
+		<!-- <label>Projects</label>
+		<textarea class="span8" rows="5" placeholder="Notable projects"></textarea><br />
+		<input type="text" placeholder="Please provide the url if any for the aforementioned project" class="span8" />--><br />
+		<p><a data-toggle="modal" href="#addproject">Please click here to add a new project</a></p>
+		<button class="btn btn-primary btn-large" type="submit">Add the profile</button>
+		<button class="btn btn-large" type="reset">Reset all fields</button>
+	</form>
+	<div class="modal hide fade" id="addproject">	
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal">&times;</a>
+			<h3>Add a new project</h3>
+		</div>
+		<div class="modal-body">
+			<label>Enter the project name</label>
+				<input type="text" class="span5" placeholder="Enter the project title here" />
+			<label>Enter the project url</label>	
+				<input type="text" class="span5" placeholder="Enter the project url" />
+			<p>OR</p>
+			<select class="span5">
+				<label>Select an existing project from the dropdown</label>
+				<option value="None">Click to select project</option>
+			</select>
+			<form>
+		</div>
+		<div class="modal-footer">
+				<button type="submit" class="btn btn-success">Submit</button>
+				<button type="Reset" class="btn btn-danger">Reset</button>
+				<button data-dismiss="modal" class="btn" >Close</button>
+			</form>		
+		</div>	
+	</div>	
+		
+</div>
+
+{% endif %}
 {% endblock %}
