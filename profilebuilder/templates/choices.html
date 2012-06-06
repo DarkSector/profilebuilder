@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="hero-unit">
+	<div class="heading">
+		<p style="text-align: center">Rural Housing Knowledge Network</p>
+		<hr />
+		<p style="text-align: center">Add a profile</p>
+	</div>
+<p>Please select the type of profile</p>
+<a href="{{ url_for('add_professional') }}" class="btn  btn-primary btn-large" >Professional/Organization</a><br /><br />
+<p>OR</p>
+<a href="{{ url_for('add_profile') }}" class="btn  btn-danger btn-large" >Technical profile</a> 
+</div>
+{% endblock %}
