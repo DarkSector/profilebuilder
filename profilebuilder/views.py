@@ -32,8 +32,23 @@ def show_profiles():
 		
 	allprofiles = profiles.find()
 	return render_template('index.html', profiles=allprofiles)
+
+
+@app.route('/add')
+def check_pro():
+	return render_template('choices.html')
+
+@flask_sijax.route(app,'/add/pro')
+def add_professional():
 	
-@flask_sijax.route(app,'/addprofile')
+	def new_prohandler(obj_response):
+		pass
+	def new_orghandler(obj_response):
+		pass
+	return render_template('add.html', professional=True)
+	
+
+@flask_sijax.route(app,'/add/tech')
 def add_profile():
 	"""
 	These functions handle profile adding
@@ -79,7 +94,7 @@ def add_profile():
 			return g.sijax.process_request()
 			
 	typeofprofiles = types.find()
-	return render_template('add.html', profiletypes=typeofprofiles)
+	return render_template('add.html', profiletypes=typeofprofiles, tech=True)
 	
 @app.route('/edit')
 def edit_404():
@@ -185,7 +200,7 @@ def logout():
 	return redirect(url_for('show_profiles'))
 
 
-@app.route('/view/profile/<_id>')
+@app.route('/view/profile/tech/<_id>')
 def render_techprofile(_id):
 	#try:
 	#	profileinfo = profiles.find(ObjectId(_id))
