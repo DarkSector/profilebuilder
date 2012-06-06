@@ -9,7 +9,7 @@ from flask import Flask, request, session, redirect, url_for, abort, \
      render_template, flash, g
 from flask.ext.bcrypt import bcrypt, generate_password_hash, check_password_hash
 import flask_sijax
-from profilebuilder import conn, dbobj, users, profiles, types
+from profilebuilder import conn, dbobj, users, profiles, types, pros
 from profilebuilder import app
 
 
