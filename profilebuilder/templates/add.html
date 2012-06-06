@@ -40,31 +40,47 @@ footer p
 <script src="{{ url_for('static', filename='js/libs/bootstrap/transition.js') }}"></script>
 <script src="{{ url_for('static', filename='js/libs/bootstrap/modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/libs/bootstrap/alert.js') }}"></script>
+
 <script type="text/javascript">
 $(function() {          
     $('#newprofiletypeform').bind('submit', function() {
-        Sijax.request('save_profiletype', [$('#profilefield').attr('value')]);
-
-        //Prevent the form from being submitted
+        Sijax.request('save_profiletype', 
+		[$('#profilefield').attr('value')]
+		);
         return false;
 		$('#profilefield').focus();
     });
 
 	$('#addnewprofileform').bind('submit', function(){
-		Sijax.request('save_newprofile', [$('#profiletitle').attr('value'),$('#uniquetitle').attr('value'), $('#profileselect').attr('value') ]);
+		Sijax.request('save_newprofile', 
+		[$('#profiletitle').attr('value'),
+		$('#uniquetitle').attr('value'), 
+		$('#profileselect').attr('value') ]);
 		return false;
+	});
+	
+	$('#addorgform').bind('submit', function(){
+		Sijax.request('save_neworg',
+		[$('#orgtype').attr('value'),
+		$('#orgtitle').attr('value'),
+		$('#orgsummary').attr('value')]);
+		return false;
+		);
 	});
     
 });
 </script>
+
 <script>
 	jQuery.fn.reset = function () {
 	  $(this).each (function() { this.reset(); });
 	}
 </script>
+
 {% endblock %}
 
 {% block body %}
+
 {% if not professional %}
 <div class="alerts">
 	<div id="profiletypeaddsuccess" class="alert alert-block alert-success hide fade in" data-alert="alert">
@@ -84,6 +100,7 @@ $(function() {
 		<p><strong>Oh!</strong> Something went wrong, you might want to try that again.</p>
 	</div>
 </div>	
+
 <div class="hero-unit">
 
 	<p class="heading">Rural Housing Knowledge Network</p>
@@ -143,7 +160,7 @@ $(function() {
 		<hr />
 		<p>Add a professional profile</p>
 	</div>
-	<form id="addprorgform">
+	<form id="addorgform">
 		<label>Please select type of professional profile:</label>
 		<select id="professionalselect" name="profiletype" class="span5">
 			<option value="Organization">Organization</option>
