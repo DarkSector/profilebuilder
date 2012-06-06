@@ -34,6 +34,7 @@ dbobj = conn[pymongoconfig.MONGO_DATABASE]
 users = dbobj['accesslist']
 profiles = dbobj['profiles']
 types = dbobj['profiletypes']
+pros = dbobj['professionals']
 
 #third level imports
 import profilebuilder.views
