@@ -59,6 +59,8 @@ footer p
 {% endblock %}
 
 {% block body %}
+
+{% if not techkey %}
 <div class="hero-unit">
 	<p class="heading">Rural Housing Knowledge Network</p>
 	<hr />
@@ -97,5 +99,48 @@ footer p
 		</form>
 		</div><!-- editingstage ends -->
 		
-</div>	
+</div>
+
+{% else %}
+
+<div class="hero-unit">
+	<p class="heading">Rural Housing Knowledge Network</p>
+	<hr />
+	
+	<p>Unique ID: {{ orginfo._id }}</p>
+	<div id="editingstage">
+
+		<table class="table table-striped table-condensed">
+			<colgroup>
+				<col class="span2">
+				<col class="span2">
+
+			</colgroup>
+			<tbody>
+				{% autoescape false %}
+				{% for i in orginfo.keys() %}
+					<tr>
+						<td>{{ i }}</td>
+						
+						<td>{{ orginfo[i] }}</td>
+						
+					</tr>	
+				{% endfor %}
+				{% endautoescape %}
+			</tbody>	
+		</table>
+		
+		<a class="btn " href="">Refresh</a>
+		<hr />		
+		<p><a href="">Upload a picture</a></p>
+		</div><!-- editingstage ends -->
+		
+</div>
+
+
+
+
+
+
+{% endif %}	
 {% endblock %}
