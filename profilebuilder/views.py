@@ -22,6 +22,9 @@ def show_profiles():
 		
 		The corrosponding table row is removed simultaneously
 		"""
+		#try:
+		#	profiles.find(ObjectId(object_id))
+			
 		profiles.remove(ObjectId(object_id))
 		div_id =  '"#' + object_id + '"'
 		return obj_response.script('$('+div_id+').remove();'), obj_response.script("$('#profiledelete').show()")
@@ -31,20 +34,33 @@ def show_profiles():
 		return g.sijax.process_request()
 		
 	allprofiles = profiles.find()
-	return render_template('index.html', profiles=allprofiles)
+	professionals = pros.find()
+	return render_template('index.html', profiles=allprofiles, professionals=professionals)
 
 
 @app.route('/add')
 def check_pro():
 	return render_template('choices.html')
 
+
 @flask_sijax.route(app,'/add/pro')
 def add_professional():
 	
-	def new_prohandler(obj_response):
-		pass
-	def new_orghandler(obj_response):
-		pass
+	def neworg_handler(obj_response,orgtype,orgtitle,orgsummary):
+		if orgtype == "" or orgtitle == "" or orgsummary == "":
+			return obj_response.script("$('#missingfieldalert').show()")
+		#return obj_response.alert(orgtype,orgtitle,orgsummary)
+		else:
+			professional = {'orgtype':orgtype, 'title':orgtitle, 'summary':orgsummary}
+			pros.insert(professional)
+	#def new_orghandler(obj_response):
+	#	pass
+	
+	if g.sijax.is_sijax_request:
+			g.sijax.register_callback('save_org', neworg_handler)
+	#		g.sijax.register_callback('save_newprofile', newprofile_handler)	
+			return g.sijax.process_request()
+			
 	return render_template('add.html', professional=True)
 	
 
@@ -101,7 +117,7 @@ def edit_404():
 	flash('Please select the profile you want to edit')
 	return redirect(url_for('show_profiles'))
 
-@flask_sijax.route(app,'/edit/<profileid>')
+@flask_sijax.route(app,'/edit/tech/<profileid>')
 def edit_profile(profileid):
 	"""
 	The profile has to be edited. The following page allows following 
@@ -147,6 +163,15 @@ def edit_profile(profileid):
 		
 	return	render_template('edit.html', profile_info=profile_info)
 
+@flask_sijax.route(app,'/edit/pro/<profile_id>')
+def edit_orgprofile(profile_id):
+	
+	def editorgdata_handler(obj_response,data_key, data_value):
+		pass
+	if g.sijax.is_sijax_request:
+		g.sijax.register_callback('save_orgdata',editorgdata_handler)
+		return g.sijax.process_request()
+	return render_template('edit.html')
 
 @app.route('/register', methods=["POST","GET"])	
 def register():
