@@ -42,13 +42,19 @@ footer p
 <script type="text/javascript"
     src="{{ url_for('static', filename='js/sijax/sijax.js') }}">
 </script>
+<script type="text/javascript"
+    src="{{ url_for('static', filename='js/sijax/upload.js') }}">
+</script>
 <script type="text/javascript">
 	    {{ g.sijax.get_js()|safe }}
 </script>
 <script type="text/javascript">
 	$(function(){
 		$('#newDataForm').bind('submit', function(){
-			Sijax.request('save_editdata', [$('#key').attr('value'),$('#majorcontent').attr('value')]);
+			Sijax.request('save_editdata',
+			 [$('#key').attr('value'),
+			  $('#majorcontent').attr('value')
+			 ]);
 			return false;
 		});
 	});
@@ -79,7 +85,6 @@ footer p
 				{% for i in profile_info.keys() %}
 					<tr>
 						<td>{{ i }}</td>
-						
 						<td>{{ profile_info[i] }}</td>
 						
 					</tr>	
