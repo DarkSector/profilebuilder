@@ -45,8 +45,7 @@ footer p
 $(function() {          
     $('#newprofiletypeform').bind('submit', function() {
         Sijax.request('save_profiletype', 
-		[$('#profilefield').attr('value')]
-		);
+		[$('#profilefield').attr('value')]);
         return false;
 		$('#profilefield').focus();
     });
@@ -198,6 +197,13 @@ $(function() {
 			<a class="close" data-dismiss="alert" href="#">&times;</a>
 			<p><strong>No can do cap'n</strong> Please check there is a missing field in the form. You need to fill all fields.</p>
 		</div>
+		
+		<div id="orgprofileadded" class="alert alert-block alert-success hide fade in" data-alert="alert">
+			<a class="close" data-dismiss="alert" href="#">&times;</a>
+			<p><strong>Added a professional/organization</strong> Please check the <a href="{{ url_for('show_profiles') }}">All profiles</a> page to edit the profile</p>
+		</div>
+	</div>
+		
 	<!-- 
 	<div class="modal hide fade" id="addproject">	
 		<div class="modal-header">
@@ -222,8 +228,7 @@ $(function() {
 				<button data-dismiss="modal" class="btn" >Close</button>
 			</form>		
 		</div>	
-	</div>-->	
-		
+	</div>-->			
 </div>
 
 {% endif %}
