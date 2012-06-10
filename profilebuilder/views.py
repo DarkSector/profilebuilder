@@ -12,7 +12,7 @@ import flask_sijax
 from profilebuilder import conn, dbobj, users, profiles, types, pros
 from profilebuilder import app
 
-
+################################################################################
 @flask_sijax.route(app,'/')
 def show_profiles():
 	def delete_profile(obj_response,object_id):
@@ -37,11 +37,11 @@ def show_profiles():
 	professionals = pros.find()
 	return render_template('index.html', profiles=allprofiles, professionals=professionals)
 
-
+################################################################################
 @app.route('/add')
 def check_pro():
 	return render_template('choices.html')
-
+################################################################################
 
 @flask_sijax.route(app,'/add/pro')
 def add_professional():
@@ -62,7 +62,7 @@ def add_professional():
 			return g.sijax.process_request()
 			
 	return render_template('add.html', professional=True)
-	
+################################################################################	
 
 @flask_sijax.route(app,'/add/tech')
 def add_profile():
@@ -111,12 +111,12 @@ def add_profile():
 			
 	typeofprofiles = types.find()
 	return render_template('add.html', profiletypes=typeofprofiles, tech=True)
-	
+################################################################################	
 @app.route('/edit')
 def edit_404():
 	flash('Please select the profile you want to edit')
 	return redirect(url_for('show_profiles'))
-
+################################################################################
 @flask_sijax.route(app,'/edit/tech/<profileid>')
 def edit_profile(profileid):
 	"""
@@ -162,17 +162,25 @@ def edit_profile(profileid):
 			return g.sijax.process_request()
 		
 	return	render_template('edit.html', profile_info=profile_info)
-
+################################################################################
 @flask_sijax.route(app,'/edit/pro/<profile_id>')
 def edit_orgprofile(profile_id):
+	
+	try:
+		orginfo = pros.find_one(ObjectId(profile_id))
+	except InvalidId:
+		return redirect(url_for('show_profiles'))
+	else:
+		orginfo = orginfo
 	
 	def editorgdata_handler(obj_response,data_key, data_value):
 		pass
 	if g.sijax.is_sijax_request:
 		g.sijax.register_callback('save_orgdata',editorgdata_handler)
 		return g.sijax.process_request()
-	return render_template('edit.html')
-
+		
+	return render_template('edit.html',techkey=True,orginfo=orginfo)
+################################################################################
 @app.route('/register', methods=["POST","GET"])	
 def register():
 	"""
@@ -197,7 +205,7 @@ def register():
 			#dont proceed
 			flash("Please enter the password same twice")
 	return render_template('register.html')
-
+################################################################################
 @app.route('/login', methods=["GET","POST"])
 def login():
 	"""User logging in function"""
@@ -224,7 +232,7 @@ def logout():
 	flash('logged out')
 	return redirect(url_for('show_profiles'))
 
-
+################################################################################
 @app.route('/view/profile/tech/<_id>')
 def render_techprofile(_id):
 	#try:
