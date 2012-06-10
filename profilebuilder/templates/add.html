@@ -60,12 +60,12 @@ $(function() {
 	});
 	
 	$('#addorgform').bind('submit', function(){
-		Sijax.request('save_neworg',
+		Sijax.request('save_org',
 		[$('#orgtype').attr('value'),
 		$('#orgtitle').attr('value'),
 		$('#orgsummary').attr('value')]);
 		return false;
-		);
+		
 	});
     
 });
@@ -83,23 +83,28 @@ $(function() {
 
 {% if not professional %}
 <div class="alerts">
+	
 	<div id="profiletypeaddsuccess" class="alert alert-block alert-success hide fade in" data-alert="alert">
 		<a class="close" data-dismiss="alert" href="#">&times;</a>
 		<p><strong>Added a profile type successfully</strong> Please check the drop down menu for the types</p>
 	</div>
+	
 	<div id="profiletypeaddfail" class="alert alert-block alert-danger hide fade in" data-alert="alert">
 		<a class="close" data-dismiss="alert" href="#">&times;</a>
 		<p><strong>Sorry something went wrong</strong> you probably might want to try again</p>
-	</div>	
+	</div>
+		
 	<div id="profileaddsuccess" class="alert alert-block alert-success hide fade in" data-alert="alert">
 		<a class="close" data-dismiss="alert" href="#">&times;</a>
 		<p><strong>Added a new profile successfully!</strong> Please check the <a href="{{ url_for('show_profiles') }}">All profiles</a> page to edit it or change other attributes</p>
 	</div>
+	
 	<div id="profileaddfail" class="alert alert-block alert-danger hide fade in" data-alert="alert">
 		<a class="close" data-dismiss="alert" href="#">&times;</a>
 		<p><strong>Oh!</strong> Something went wrong, you might want to try that again.</p>
 	</div>
-</div>	
+	
+</div><!-- alerts end -->	
 
 <div class="hero-unit">
 
@@ -127,7 +132,7 @@ $(function() {
 		<a href="{{ url_for('show_profiles') }}">See all profiles?</a>
 	</form>	
 	<!-- ends the add new profile form -->
-</div>
+</div><!-- hero unit ends -->
 	
 <div class="modal fade hide " id="addType" >
 	<div class="modal-header">
@@ -141,11 +146,13 @@ $(function() {
 			<p>Example: Roofing, Foundation, etc.</p>
 
 	</div>
+	
 	<div class="modal-footer">
 		<button class="btn btn-danger" class="close" data-dismiss="modal">Close</button>
 		<button class="btn btn-primary" value="send" type="submit">Add</button>
 		</form>
 	</div>
+	
 </div><!-- modal ends -->
 
 
@@ -154,29 +161,44 @@ $(function() {
 
 
 
+
 <div class="hero-unit">
+	
 	<div class="heading">
 		<p>Rural Housing Knowledge Network</p>
 		<hr />
 		<p>Add a professional profile</p>
 	</div>
+	
 	<form id="addorgform">
 		<label>Please select type of professional profile:</label>
-		<select id="professionalselect" name="profiletype" class="span5">
+		
+		<select id="orgtype" name="profiletype" class="span5">
 			<option value="Organization">Organization</option>
 			<option value="Professional">Professional/Individual</option>
 		</select>
+		
 		<label>Please enter the name</label>
-		<input type="text" class="span8" placeholder="Name of Professional/Organization" />
+		<input id="orgtitle" type="text" class="span8" placeholder="Name of Professional/Organization" />
+		
 		<label>Summary</label>
-		<textarea rows="15" class="span8" placeholder="Please provide with a brief summary of the professional or organization"></textarea>
+		<textarea id="orgsummary" rows="15" class="span8" placeholder="Please provide with a brief summary of the professional or organization"></textarea>
+		
 		<!-- <label>Projects</label>
 		<textarea class="span8" rows="5" placeholder="Notable projects"></textarea><br />
 		<input type="text" placeholder="Please provide the url if any for the aforementioned project" class="span8" />--><br />
-		<p><a data-toggle="modal" href="#addproject">Please click here to add a new project</a></p>
+		<!-- <p><a data-toggle="modal" href="#addproject">Please click here to add a new project</a></p>-->
+		
 		<button class="btn btn-primary btn-large" type="submit">Add the profile</button>
 		<button class="btn btn-large" type="reset">Reset all fields</button>
+		
 	</form>
+	<div class="alerts">
+		<div id="missingfieldalert" class="alert alert-block alert-danger hide fade in" data-alert="alert">
+			<a class="close" data-dismiss="alert" href="#">&times;</a>
+			<p><strong>No can do cap'n</strong> Please check there is a missing field in the form. You need to fill all fields.</p>
+		</div>
+	<!-- 
 	<div class="modal hide fade" id="addproject">	
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">&times;</a>
@@ -200,7 +222,7 @@ $(function() {
 				<button data-dismiss="modal" class="btn" >Close</button>
 			</form>		
 		</div>	
-	</div>	
+	</div>-->	
 		
 </div>
 
