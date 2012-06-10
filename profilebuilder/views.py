@@ -22,20 +22,32 @@ def show_profiles():
 		
 		The corrosponding table row is removed simultaneously
 		"""
-		#try:
-		#	profiles.find(ObjectId(object_id))
-			
-		profiles.remove(ObjectId(object_id))
-		div_id =  '"#' + object_id + '"'
-		return obj_response.script('$('+div_id+').remove();'), obj_response.script("$('#profiledelete').show()")
+		tech_exist = profiles.find_one(ObjectId(object_id))
+		if not tech_exist:
+			org_exist = pros.find_one(ObjectId(object_id))
+			if not org_exist:
+				obj_response.alert("No such Profile found")
+			else:
+				pros.remove(ObjectId(object_id))
+				div_id =  '"#' + object_id + '"'
+				return obj_response.script('$('+div_id+').remove();'),\
+				obj_response.script("$('#profiledelete').show()")				
+		else:
+			#remove the profile
+			profiles.remove(ObjectId(object_id))
+			div_id =  '"#' + object_id + '"'
+		return obj_response.script('$('+div_id+').remove();'),\
+		 obj_response.script("$('#profiledelete').show()")
 	
+	#request handling
 	if g.sijax.is_sijax_request:
 		g.sijax.register_callback('delete_this',delete_profile)
 		return g.sijax.process_request()
 		
 	allprofiles = profiles.find()
 	professionals = pros.find()
-	return render_template('index.html', profiles=allprofiles, professionals=professionals)
+	return render_template('index.html', profiles=allprofiles,\
+	 professionals=professionals)
 
 ################################################################################
 @app.route('/add')
@@ -49,16 +61,19 @@ def add_professional():
 	def neworg_handler(obj_response,orgtype,orgtitle,orgsummary):
 		if orgtype == "" or orgtitle == "" or orgsummary == "":
 			return obj_response.script("$('#missingfieldalert').show()")
+		#debug	
 		#return obj_response.alert(orgtype,orgtitle,orgsummary)
+		
 		else:
-			professional = {'orgtype':orgtype, 'title':orgtitle, 'summary':orgsummary}
+			professional = {'orgtype':orgtype, 'title':orgtitle,\
+			 'summary':orgsummary}
 			pros.insert(professional)
-	#def new_orghandler(obj_response):
-	#	pass
-	
+			#return appropriate response
+			return obj_response.script("$('#orgprofileadded').show()"),\
+			 obj_response.script('$("#addorgform").reset()')
+
 	if g.sijax.is_sijax_request:
 			g.sijax.register_callback('save_org', neworg_handler)
-	#		g.sijax.register_callback('save_newprofile', newprofile_handler)	
 			return g.sijax.process_request()
 			
 	return render_template('add.html', professional=True)
@@ -86,12 +101,14 @@ def add_profile():
 		
 		#check if the profile is added
 		if checkifAdded:
-			return obj_response.script("$('#profileaddsuccess').show()"),obj_response.script('$("#addnewprofileform").reset()')
+			return obj_response.script("$('#profileaddsuccess').show()"),\
+			obj_response.script('$("#addnewprofileform").reset()')
 		else:
 			return obj_response.script("$('#profileaddfail').show()")
 	
 	def newtype_handler(obj_response,profilevalue):
 		"""
+		This function adds a new profile type into the list to choose from
 		
 		"""
 		#debug
@@ -101,7 +118,10 @@ def add_profile():
 		types.insert({'name':profilevalue})
 		
 		#return obj_response.script('Added a new profile type :' + profilevalue), obj_response.script('$("#profileselect").append("<option value=' + profilevalue + '>' + profilevalue + '</option>")')
-		return obj_response.script("$('#addType').modal('toggle')"),obj_response.script("$('#profiletypeaddsuccess').show()"),obj_response.script('$("#profileselect").append("<option value=' + profilevalue + '>' + profilevalue + '</option>")')
+		return obj_response.script("$('#addType').modal('toggle')"),\
+		obj_response.script("$('#profiletypeaddsuccess').show()"),\
+		obj_response.script('$("#profileselect").append("<option value=' +\
+		 profilevalue + '>' + profilevalue + '</option>")')
 		
 			
 	if g.sijax.is_sijax_request:
@@ -161,23 +181,26 @@ def edit_profile(profileid):
 			g.sijax.register_callback('save_editdata',editdata_handler)
 			return g.sijax.process_request()
 		
-	return	render_template('edit.html', profile_info=profile_info)
+	return render_template('edit.html', profile_info=profile_info)
 ################################################################################
 @flask_sijax.route(app,'/edit/pro/<profile_id>')
 def edit_orgprofile(profile_id):
 	
 	try:
+		#try if organization/professional is available
 		orginfo = pros.find_one(ObjectId(profile_id))
 	except InvalidId:
+		#if it is not then redirect to main page
 		return redirect(url_for('show_profiles'))
 	else:
+		#otherwise put the value in the orginfo key
 		orginfo = orginfo
 	
-	def editorgdata_handler(obj_response,data_key, data_value):
-		pass
-	if g.sijax.is_sijax_request:
-		g.sijax.register_callback('save_orgdata',editorgdata_handler)
-		return g.sijax.process_request()
+	#def editorgdata_handler(obj_response,data_key, data_value):
+	#	pass
+	#if g.sijax.is_sijax_request:
+	#	g.sijax.register_callback('save_orgdata',editorgdata_handler)
+	#	return g.sijax.process_request()
 		
 	return render_template('edit.html',techkey=True,orginfo=orginfo)
 ################################################################################
@@ -187,6 +210,9 @@ def register():
 	An admin user already logged is allowed to register new usernames
 	the new usernames cannot be changed at the moment nor can they be
 	deleted unless done from command line
+	
+	Registeration is not through ajax requests it's through proper form
+	POST request
 	"""
 	if request.method == "POST":
 		username = request.form["username"]
@@ -244,9 +270,9 @@ def render_techprofile(_id):
 	return render_template('finalview.html', profileinfo=profileinfo)
 
 
-#@app.route('/view/profile/<uniquename>')
-#def render_techprofile(uniquename):
-#	pass
+@app.route('/view/profile/professional/<uniquename>')
+def render_techprofile(uniquename):
+	pass
 
 #@app.route('/view/professional/<proname>')
 #def render_profprofile(proname):
