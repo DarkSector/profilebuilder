@@ -81,7 +81,7 @@ footer p
 				<tr id="{{ profile._id }}">
 					<td><a href="/view/profile/tech/{{ profile._id }}">{{ profile._id }}</a></td>
 					<td>{{ profile.title }} / {{ profile.unique }}</td>
-					<td><a href="/edit/{{ profile._id}}">Edit</a> / <!-- <a href="javascript://" onclick="Sijax.request('delete_this', [ '{{ profile._id }}' ] );">Delete</a>--><a href="#deletedialog{{ profile._id }}" data-toggle="modal">Delete</a> 
+					<td><a href="/edit/tech/{{ profile._id}}">Edit</a> / <a href="#deletedialog{{ profile._id }}" data-toggle="modal">Delete</a> 
 						
 						
 						<div id="deletedialog{{ profile._id }}" class="modal hide fade">	
@@ -101,13 +101,28 @@ footer p
 					</td>
 				</tr>
 				{% endfor %}
-				
+				{% for pro in professionals %}
 				<tr id="{{ pro._id }}">
 					<td><a href="/view/profile/prof/{{ pro._id }}">{{ pro._id	}}</a>
-					<td>{{ pro.name	 }} / {{ pro.orgtype }}</td>
-					<td><a href="/edit/{{ pro._id}}">Edit</a> / <!-- <a href="javascript://" onclick="Sijax.request('delete_this', [ '{{ profile._id }}' ] );">Delete</a>--><a href="#deletepro{{ pro._id }}" data-toggle="modal">Delete</a>	
-				</tr>		
-				
+					<td>{{ pro.title }} / {{ pro.orgtype }}</td>
+					<td><a href="/edit/pro/{{ pro._id}}">Edit</a> / <a href="#deletedialog{{ pro._id }}" data-toggle="modal">Delete</a>	
+				</tr>	
+					
+				<div id="deletedialog{{ pro._id }}" class="modal hide fade">	
+					<div class="modal-header">
+						<a type="button" class="close" data-dismiss="modal">×</a>
+						<h3>Achtung Bitte!</h3>
+						
+					</div>
+					<div class="modal-body">
+						Are you sure you want to delete this profile?
+					</div>
+					<div class="modal-footer">
+						<a href="javascript://" data-dismiss="modal" class="btn btn-danger" onclick="Sijax.request('delete_this', [ '{{ pro._id }}' ] );">Yes! delete it</a><a data-dismiss="modal" class="btn btn-success">No, I think I'd like to go back</a>
+					</div>			
+				</div>	
+				<!-- modal ends -->
+				{% endfor %}
 			</tbody>
 		</table>
 	
