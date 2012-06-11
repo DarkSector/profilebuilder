@@ -7,5 +7,5 @@ A mongodb based dynamic profile builder for Rural Housing Knowledge Network goin
 ##Todo:
 
 1. Add cloning option
-2. Add TinyMCE support
+2. ~~Add TinyMCE support~~
 3. Create galleries and pick and place links
