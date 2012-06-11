@@ -38,11 +38,19 @@ footer p
 {% endblock %}
 
 {% block body %}
+
 {% autoescape false %}
+{% if not techkey %}
 <div class="public">
 	{% for profile in profileinfo.keys() %}
 		<p>{{ profile }}: {{ profileinfo[profile] }} </p>
 	{% endfor %}
 </div>
+{% else %}
+	{% for info in proinfo.keys() %}
+		<p>{{ info }}: {{ proinfo[info] }} </p>
+	{% endfor %}
+{% endif %}
+
 {% endautoescape %}	
 {% endblock %}

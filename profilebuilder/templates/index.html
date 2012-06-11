@@ -103,7 +103,7 @@ footer p
 				{% endfor %}
 				{% for pro in professionals %}
 				<tr id="{{ pro._id }}">
-					<td><a href="/view/profile/prof/{{ pro._id }}">{{ pro._id	}}</a>
+					<td><a href="/view/profile/professional/{{ pro._id }}">{{ pro._id	}}</a>
 					<td>{{ pro.title }} / {{ pro.orgtype }}</td>
 					<td><a href="/edit/pro/{{ pro._id}}">Edit</a> / <a href="#deletedialog{{ pro._id }}" data-toggle="modal">Delete</a>	
 				</tr>	

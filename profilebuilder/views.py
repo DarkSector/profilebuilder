@@ -2,6 +2,11 @@ from __future__ import with_statement
 
 import os
 import pymongo
+#import Image
+#import shutil
+#import StringIO
+#import zipfile
+import pymongo
 from pymongo import Connection
 from bson.objectid import ObjectId, InvalidId
 import pymongoconfig
@@ -117,7 +122,10 @@ def add_profile():
 		#insert type of profile
 		types.insert({'name':profilevalue})
 		
-		#return obj_response.script('Added a new profile type :' + profilevalue), obj_response.script('$("#profileselect").append("<option value=' + profilevalue + '>' + profilevalue + '</option>")')
+		#return obj_response.script('Added a new profile type :' + \
+		# profilevalue),\
+		# obj_response.script('$("#profileselect").append("<option value=' + \
+		# profilevalue + '>' + profilevalue + '</option>")')
 		return obj_response.script("$('#addType').modal('toggle')"),\
 		obj_response.script("$('#profiletypeaddsuccess').show()"),\
 		obj_response.script('$("#profileselect").append("<option value=' +\
@@ -174,6 +182,7 @@ def edit_profile(profileid):
 			current_profile[data_key] = data_value
 			profiles.save(current_profile)
 			return obj_response.alert("value stored")
+
 		#foo = str(current_profile)
 		#return obj_response.alert(foo)
 	
@@ -259,20 +268,25 @@ def logout():
 	return redirect(url_for('show_profiles'))
 
 ################################################################################
-@app.route('/view/profile/tech/<_id>')
-def render_techprofile(_id):
-	#try:
-	#	profileinfo = profiles.find(ObjectId(_id))
-	#except InvalidId:
-	#	flash("No such profile found")
-	
-	profileinfo = profiles.find_one(ObjectId(_id))
+@app.route('/view/profile/tech/<profile_key>')
+def render_techprofile(profile_key):
+	try:
+		profileinfo = profiles.find_one(ObjectId(profile_key))
+	except InvalidId:
+		return redirect(url_for('show_profiles'))
+	else:
+		profileinfo = profileinfo
 	return render_template('finalview.html', profileinfo=profileinfo)
+################################################################################
 
-
-@app.route('/view/profile/professional/<uniquename>')
-def render_techprofile(uniquename):
-	pass
+@app.route('/view/profile/professional/<uniqueid>')
+def render_orgprofile(uniqueid):
+	try:
+		proinfo = pros.find_one(ObjectId(uniqueid))
+	except InvalidId:
+		return redirect(url_for('show_profiles'))
+	else:
+		return render_template('finalview.html', proinfo=proinfo, techkey=True)
 
 #@app.route('/view/professional/<proname>')
 #def render_profprofile(proname):
