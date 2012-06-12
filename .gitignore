@@ -2,3 +2,4 @@ data
 *.pyc
 static/js/sijax
 profilebuilder/static/js/sijax
+profilebuilder/static/img/uploadedmedia/*
