@@ -1,6 +1,7 @@
 from __future__ import with_statement
 
 import os
+from time import sleep
 import pymongo
 #import Image
 #import shutil
@@ -14,8 +15,17 @@ from flask import Flask, request, session, redirect, url_for, abort, \
      render_template, flash, g
 from flask.ext.bcrypt import bcrypt, generate_password_hash, check_password_hash
 import flask_sijax
+from werkzeug import secure_filename
 from profilebuilder import conn, dbobj, users, profiles, types, pros
 from profilebuilder import app
+from profilebuilder import ALLOWED_EXTENSIONS
+
+################################################################################
+
+def allowed_file(filename):
+	"""docstring for allowed_file"""
+	return '.' in filename and filename.rsplit('.',1)[1] in ALLOWED_EXTENSIONS
+		
 
 ################################################################################
 @flask_sijax.route(app,'/')
@@ -295,3 +305,28 @@ def render_orgprofile(uniqueid):
 #@app.route('/view/org/<orgname>')
 #def render_orgprofile(orgname):
 #	pass
+################################################################################
+
+@app.route('/upload/images', methods=['GET','POST'])
+def upload_images():
+	if request.method == "POST":
+		#file = request.files['file']
+		#print file		
+		folder_name = request.form['folder_name']
+		for file in request.files.getlist('file'):
+			 if file and allowed_file(file.filename):
+				filename = secure_filename(file.filename)
+				if folder_name == "":
+					back = file.save(os.path.join(app.config['UPLOADED_FILES_DEST'], filename))
+					#print back
+				else:
+					#check for directory
+					#if not there, then create it
+					new_path = os.path.join(app.config['UPLOADED_FILES_DEST'],folder_name)
+					if not os.path.exists(new_path):
+						os.makedirs(new_path)
+					else:
+						back = file.save(os.path.join(app.config['UPLOADED_FILES_DEST'], folder_name ,filename))
+					
+				sleep(5)
+	return render_template('upload_image_test.html')
