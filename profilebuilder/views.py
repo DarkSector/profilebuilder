@@ -330,3 +330,7 @@ def upload_images():
 					
 				sleep(5)
 	return render_template('upload_image_test.html')
+	
+@app.route('/uploads/<filename>')
+def retrieve_files(filename):
+	return send_from_directory(app.config['UPLOADED_FILES_DEST'],filename)
