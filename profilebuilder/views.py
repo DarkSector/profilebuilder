@@ -3,11 +3,6 @@ from __future__ import with_statement
 import os
 from time import sleep
 import pymongo
-#import Image
-#import shutil
-#import StringIO
-#import zipfile
-import pymongo
 from pymongo import Connection
 from bson.objectid import ObjectId, InvalidId
 import pymongoconfig
@@ -23,7 +18,10 @@ from profilebuilder import ALLOWED_EXTENSIONS
 ################################################################################
 
 def allowed_file(filename):
-	"""docstring for allowed_file"""
+	"""
+	This function checks whether the mimetype is allowed or not. We could
+	additionally put a check in the form itself
+	"""
 	return '.' in filename and filename.rsplit('.',1)[1] in ALLOWED_EXTENSIONS
 		
 
