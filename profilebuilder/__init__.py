@@ -33,8 +33,6 @@ path = os.path.join('.',os.path.dirname(__file__), '../')
 
 app.config['SIJAX_STATIC_PATH'] = os.path.join('.',os.path.dirname(__file__), 'static/js/sijax')
 
-
-
 app.config['UPLOADED_FILES_DEST'] = os.path.join('.', os.path.dirname(__file__),'static/img/uploadedmedia')
 
 
