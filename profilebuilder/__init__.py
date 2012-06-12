@@ -23,6 +23,7 @@ from flask.ext.bcrypt import bcrypt, generate_password_hash, check_password_hash
 import flask_sijax
 from flaskext.uploads import UploadSet, configure_uploads, IMAGES, \
                               UploadNotAllowed
+from werkzeug import secure_filename
 
 
 app = Flask(__name__)
@@ -32,7 +33,18 @@ path = os.path.join('.',os.path.dirname(__file__), '../')
 
 app.config['SIJAX_STATIC_PATH'] = os.path.join('.',os.path.dirname(__file__), 'static/js/sijax')
 
+
+
 app.config['UPLOADED_FILES_DEST'] = os.path.join('.', os.path.dirname(__file__),'static/img/uploadedmedia')
+
+
+if not os.path.exists(app.config['UPLOADED_FILES_DEST']):
+	os.makedirs(app.config['UPLOADED_FILES_DEST'])
+else:
+	pass
+
+
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 #initialize flask_sijax
 flask_sijax.Sijax(app)
@@ -44,6 +56,8 @@ users = dbobj['accesslist']
 profiles = dbobj['profiles']
 types = dbobj['profiletypes']
 pros = dbobj['professionals']
+
+
 
 #third level imports
 import profilebuilder.views
