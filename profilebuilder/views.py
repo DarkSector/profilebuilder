@@ -348,14 +348,24 @@ def tags():
 		"""
 		a handler for a new tag
 		"""
+		
+		#obj_response.script('$("#profileselect").append("<option value=' +\
+		# profilevalue + '>' + profilevalue + '</option>")')
+		
+		
 		backvalue = profiletags.insert({'value': tagvalue})
-		return obj_response.script("$('#success').show()"), obj_response.script("$('#addtagform').reset()")
+		return obj_response.script("$('#success').show()"),\
+		 obj_response.script("$('#addtagform').reset()"),\
+		 obj_response.script("$('#taglist').append('<li id=\"tagvalueid'" + tagvalue + ");")
 		
 	def deltag_handler(obj_response,tagid):
 		"""
 		a handler for removing existing tags
 		"""
-		pass
+		profiletags.remove(ObjectId(tagid))
+		tagvalueid = "tagvalue" + tagid
+		tagdelid = "tagdeletion" + tagid
+		return obj_response.script("$('#"+tagvalueid+"').remove();")
 		
 	if g.sijax.is_sijax_request:
 			g.sijax.register_callback('save_tag',savetag_handler)
