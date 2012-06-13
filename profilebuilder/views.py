@@ -352,11 +352,21 @@ def tags():
 		#obj_response.script('$("#profileselect").append("<option value=' +\
 		# profilevalue + '>' + profilevalue + '</option>")')
 		
+		#<li id="tagvalue4fd8346cbb9348cef0000000"><span class="label label-info">foobar &nbsp;<a style="color: white" href="javascript://" onclick="Sijax.request('deltag', ['4fd8346cbb9348cef0000000']);">x</a></span></li>
 		
 		backvalue = profiletags.insert({'value': tagvalue})
+		#backvalue is actually the ObjectId
+		#so we use the ObjectId to retrieve the tag
+		
+		thetag = profiletags.find_one(backvalue)
+		
 		return obj_response.script("$('#success').show()"),\
-		 obj_response.script("$('#addtagform').reset()"),\
-		 obj_response.script("$('#taglist').append('<li id=\"tagvalueid'" + tagvalue + ");")
+		 obj_response.script("$('#addtagform').reset()")#,\
+		 #obj_response.script('$("#taglist").append("<li id=\"tagvalue' + \
+		 #thetag['_id'] + '\"<span class="label label-info">' + \
+		 #thetag['value'] + \
+		 #'<a href="javascript://" onclick="Sijax.request(\'deltag\', [' + \
+		 #']);">x</a></span></li>");')
 		
 	def deltag_handler(obj_response,tagid):
 		"""
