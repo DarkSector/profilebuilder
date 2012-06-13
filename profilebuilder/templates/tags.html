@@ -67,9 +67,12 @@ footer p
 		
 		<p class="heading">Rural Housing Knowledge Network</p>
 		<hr />
-		
-
-		<p>Create a new user</p>
+		<p>Existing tags</p>
+		{% for onetag in alltags %}
+		<span class="label label-info">{{ onetag.value }}</span>
+		{% endfor %}
+		<hr />
+		<p>Add new tags</p>
 		<hr />
 		<form class="form" id="addtagform" >
 			<input placeholder="Add your tags here one at a time" type="text" id="newtagvalue" name="newtagvalue" /><br />
