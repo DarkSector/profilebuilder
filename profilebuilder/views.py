@@ -250,7 +250,7 @@ def edit_profile(profileid):
 
 		#foo = str(current_profile)
 		#return obj_response.alert(foo)
-	
+			
 	if g.sijax.is_sijax_request:
 			g.sijax.register_callback('save_editdata',editdata_handler)
 			return g.sijax.process_request()
@@ -327,7 +327,9 @@ def login():
 
 @app.route('/logout')
 def logout():
-	"""docstring for logout"""
+	"""
+	logs a user out
+	"""
 	session.pop('logged_in', None)
 	flash('logged out')
 	return redirect(url_for('show_profiles'))
@@ -335,6 +337,9 @@ def logout():
 ################################################################################
 @app.route('/view/profile/tech/<profile_key>')
 def render_techprofile(profile_key):
+	"""
+	Outputs raw data of a technical profile
+	"""
 	try:
 		profileinfo = profiles.find_one(ObjectId(profile_key))
 	except InvalidId:
@@ -346,6 +351,9 @@ def render_techprofile(profile_key):
 
 @app.route('/view/profile/professional/<uniqueid>')
 def render_orgprofile(uniqueid):
+	"""
+	Renders raw output of a professional/organization profile
+	"""
 	try:
 		proinfo = pros.find_one(ObjectId(uniqueid))
 	except InvalidId:
@@ -364,6 +372,9 @@ def render_orgprofile(uniqueid):
 
 @app.route('/upload/images', methods=['GET','POST'])
 def upload_images():
+	"""
+	Upload images for any profile
+	"""
 	if request.method == "POST":
 		#file = request.files['file']
 		#print file		
@@ -388,6 +399,9 @@ def upload_images():
 	
 @app.route('/uploads/<filename>')
 def retrieve_files(filename):
+	"""
+	Retrieve files that have been uploaded
+	"""
 	return send_from_directory(app.config['UPLOADED_FILES_DEST'],filename)
 	
 ################################################################################
