@@ -341,6 +341,9 @@ def tags():
 	"""
 	Tags management
 	"""
+	
+	alltags = profiletags.find()
+	
 	def savetag_handler(obj_response,tagvalue):
 		"""
 		a handler for a new tag
@@ -359,23 +362,6 @@ def tags():
 			g.sijax.register_callback('deltag',deltag_handler)
 			return g.sijax.process_request()	
 			
-	return render_template('tags.html')
+	return render_template('tags.html', alltags=alltags)
 
 ################################################################################
-
-#@app.route('/tags', methods=["GET","POST"])
-#def tags():
-#	"""
-#	Function for tag managment
-#	"""
-	#debug
-	#print pros
-	#print profiletags
-	
-#if request.method == "POST":
-	#	tagvalue = request.form['newtagvalue']
-		
-	#	return_case = tags.insert({'value':tagvalue})
-	#	print return_case
-	
-#	return render_template('tags.html')
