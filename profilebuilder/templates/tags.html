@@ -54,12 +54,16 @@ footer p
 	text-align: center;
 }
 
+.nostyle li
+{
+	list-style-type: none;	
+}
 {% endblock %}
 {% block body %}
 <div class="alerts">
 	<div id="success" class="alert alert-block alert-success hide fade in" data-alert="alert">
 		<a class="close" data-dismiss="alert" href="#">&times;</a>
-		<p><strong>Added Tag successfully</strong> You can now add more tags if you like or if you'd like to delete a tag then click on the delete button next to the tag name</p>
+		<p><strong>Added Tag successfully</strong> You can now add more tags if you like or if you'd like to delete a tag then click on the delete button next to the tag name. <a href="" class="btn">Click here to refresh</a></p>
 	</div>
 </div>	
 	<div class="hero-unit">
@@ -67,9 +71,9 @@ footer p
 		<p class="heading">Rural Housing Knowledge Network</p>
 		<hr />
 		<p>Existing tags</p>
-		<ul id="taglist">
+		<ul id="taglist" class="nostyle">
 		{% for onetag in alltags %}	
-			<li style="list-style-type: none;" id="tagvalue{{ onetag._id }}"><span class="label label-info">{{ onetag.value }} &nbsp;<a style="color: white" href="javascript://" onclick="Sijax.request('deltag', ['{{ onetag._id}}']);">x</a></span></li>	
+			<li id="tagvalue{{ onetag._id }}"><span class="label label-info">{{ onetag.value }} &nbsp;<a style="color: white" href="javascript://" onclick="Sijax.request('deltag', ['{{ onetag._id}}']);">x</a></span></li>	
 			
 		{% endfor %}
 		</ul>
