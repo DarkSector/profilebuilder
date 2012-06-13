@@ -11,7 +11,7 @@ from flask import Flask, request, session, redirect, url_for, abort, \
 from flask.ext.bcrypt import bcrypt, generate_password_hash, check_password_hash
 import flask_sijax
 from werkzeug import secure_filename
-from profilebuilder import conn, dbobj, users, profiles, types, pros
+from profilebuilder import conn, dbobj, users, profiles, types, pros, tags
 from profilebuilder import app
 from profilebuilder import ALLOWED_EXTENSIONS
 
@@ -325,10 +325,52 @@ def upload_images():
 						os.makedirs(new_path)
 					else:
 						back = file.save(os.path.join(app.config['UPLOADED_FILES_DEST'], folder_name ,filename))
-					
-				sleep(5)
+				
+				sleep(2)
 	return render_template('upload_image_test.html')
 	
 @app.route('/uploads/<filename>')
 def retrieve_files(filename):
 	return send_from_directory(app.config['UPLOADED_FILES_DEST'],filename)
+	
+################################################################################
+
+#@flask_sijax.route(app,'/tags')
+#def tags():
+#	"""
+#	Tags management
+#	"""
+#	def savetag_handler(obj_response,tagvalue):
+#		"""
+#		a handler for a new tag
+#		"""
+#		backvalue = tags.insert({'value': tagvalue})
+#		return obj_response.script("$('#success').show()")
+		
+#	def deltag_handler(obj_response,tagid):
+#		"""
+#		a handler for removing existing tags
+#		"""
+#		pass
+		
+#	if g.sijax.is_sijax_request:
+#			g.sijax.register_callback('save_tag',savetag_handler)
+#			g.sijax.register_callback('deltag',deltag_handler)
+#			return g.sijax.process_request()	
+			
+#	return render_template('tags.html')
+
+################################################################################
+
+@app.route('/tags', methods=["GET","POST"])
+def tags():
+	"""
+	Function for tag managment
+	"""
+	if request.method == "POST":
+		tagvalue = request.form['newtagvalue']
+		
+		return_case = tags.insert({'value':tagvalue})
+		print return_case
+	
+	return render_template('tags.html')

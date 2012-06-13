@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block js %}
+<!-- 
+<script type="text/javascript"
+    src="/static/js/sijax/sijax.js">
+</script>
+
+<script type="text/javascript">
+		    {{ g.sijax.get_js()|safe }}
+</script>
+<script src="{{ url_for('static', filename='js/libs/bootstrap/alert.js') }}"></script>
+
+<script type="text/javascript">
+$(function(){
+	$('#addtagform').bind('submit', function(){
+		Sijax.request('save_tag', [$('#newtagvalue').attr('value')] );
+		return false;
+	});
+});
+</script>
+-->
+{% endblock %}
+{% block css %}
+.container > .content{
+	background-color: #fff;
+	padding: 20px;
+	/* negative indent the amount of the padding to maintain the grid system */
+	margin: 0 -20px;
+	-webkit-border-radius: 0 0 6px 6px;
+	-moz-border-radius: 0 0 6px 6px;
+	border-radius: 0 0 6px 6px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+footer p
+{
+	text-align: center;
+}
+
+.newbody
+{
+	min-height: 200px
+}
+
+.heading
+{
+	text-align: center;
+}
+
+{% endblock %}
+{% block body %}
+<div class="alerts">
+	<div id="success" class="alert alert-block alert-success hide fade in" data-alert="alert">
+		<a class="close" data-dismiss="alert" href="#">&times;</a>
+		<p><strong>Added Tag successfully</strong> Please delete the tag by pressing the delete option next to the tag</p>
+	</div>
+</div>	
+	<div class="hero-unit">
+
+		
+		<p class="heading">Rural Housing Knowledge Network</p>
+		<hr />
+		
+
+		<p>Create a new user</p>
+		<hr />
+		<form class="form" method="POST" action="{{ url_for('tags') }}" id="addtagform" >
+			<input placeholder="Add your tags here one at a time" type="text" id="newtagvalue" name="newtagvalue" /><br />
+			<button type="submit" class="btn btn-primary">Add tag</button>
+		</form>	
+	</div>
+{% endblock %}

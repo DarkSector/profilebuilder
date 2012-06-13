@@ -9,10 +9,6 @@
 from __future__ import with_statement
 
 import os
-import Image
-import shutil
-import StringIO
-import zipfile
 import pymongo
 from pymongo import Connection
 from bson.objectid import ObjectId, InvalidId
@@ -54,8 +50,7 @@ users = dbobj['accesslist']
 profiles = dbobj['profiles']
 types = dbobj['profiletypes']
 pros = dbobj['professionals']
-
-
+tags = dbobj['alltags']
 
 #third level imports
 import profilebuilder.views
