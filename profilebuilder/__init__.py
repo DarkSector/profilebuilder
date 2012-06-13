@@ -50,7 +50,7 @@ users = dbobj['accesslist']
 profiles = dbobj['profiles']
 types = dbobj['profiletypes']
 pros = dbobj['professionals']
-tags = dbobj['alltags']
+profiletags = dbobj['alltags']
 
 #third level imports
 import profilebuilder.views

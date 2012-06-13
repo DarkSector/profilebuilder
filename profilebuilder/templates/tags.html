@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block js %}
-<!-- 
+
 <script type="text/javascript"
     src="/static/js/sijax/sijax.js">
 </script>
@@ -18,7 +18,12 @@ $(function(){
 	});
 });
 </script>
--->
+<script>
+	jQuery.fn.reset = function () {
+	  $(this).each (function() { this.reset(); });
+	}
+</script>
+
 {% endblock %}
 {% block css %}
 .container > .content{
@@ -54,7 +59,7 @@ footer p
 <div class="alerts">
 	<div id="success" class="alert alert-block alert-success hide fade in" data-alert="alert">
 		<a class="close" data-dismiss="alert" href="#">&times;</a>
-		<p><strong>Added Tag successfully</strong> Please delete the tag by pressing the delete option next to the tag</p>
+		<p><strong>Added Tag successfully</strong> You can now add more tags if you like or if you'd like to delete a tag then click on the delete button next to the tag name</p>
 	</div>
 </div>	
 	<div class="hero-unit">
@@ -66,7 +71,7 @@ footer p
 
 		<p>Create a new user</p>
 		<hr />
-		<form class="form" method="POST" action="{{ url_for('tags') }}" id="addtagform" >
+		<form class="form" id="addtagform" >
 			<input placeholder="Add your tags here one at a time" type="text" id="newtagvalue" name="newtagvalue" /><br />
 			<button type="submit" class="btn btn-primary">Add tag</button>
 		</form>	
