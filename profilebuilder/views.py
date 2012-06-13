@@ -1,9 +1,11 @@
 from __future__ import with_statement
 
 import os
+import shutil
 from time import sleep
 import pymongo
 from pymongo import Connection
+import bson
 from bson.objectid import ObjectId, InvalidId
 import pymongoconfig
 from flask import Flask, request, session, redirect, url_for, abort, \
@@ -24,8 +26,24 @@ def allowed_file(filename):
 	additionally put a check in the form itself
 	"""
 	return '.' in filename and filename.rsplit('.',1)[1] in ALLOWED_EXTENSIONS
+	
+def image_folder_check_create(foldername_object_id):
+	"""docstring for image_folder_check"""
+	#new_path = os.path.join(app.config['UPLOADED_FILES_DEST'], foldername_object_id)
+	if not os.path.exists(foldername_object_id):
+		os.makedirs(foldername_object_id)
+	else:
+		pass
 		
-
+def image_folder_check_delete(folder_name_id):
+	"""docstring for image_folder_check_delete"""
+	#folder_path = os.path.join(app.config['UPLOADED_FILES_DEST'], folder_name_id)
+	#print folder_name_id
+	if os.path.exists(folder_name_id):
+		print shutil.rmtree(folder_name_id)
+	else:
+		pass
+		
 ################################################################################
 @flask_sijax.route(app,'/')
 def show_profiles():
@@ -43,12 +61,26 @@ def show_profiles():
 				obj_response.alert("No such Profile found")
 			else:
 				pros.remove(ObjectId(object_id))
+				#remove folder also
+				#print object_id.__str__()
+				folder_name = str(object_id.__str__())
+				folder_path = os.path.join(app.config['UPLOADED_FILES_DEST'],\
+								folder_name)
+				#print folder_name
+				image_folder_check_delete(folder_path)
+				
+				
 				div_id =  '"#' + object_id + '"'
 				return obj_response.script('$('+div_id+').remove();'),\
 				obj_response.script("$('#profiledelete').show()")				
 		else:
 			#remove the profile
 			profiles.remove(ObjectId(object_id))
+			folder_name = str(object_id.__str__())
+			#print folder_name
+			folder_path = os.path.join(app.config['UPLOADED_FILES_DEST'],\
+							folder_name)
+			image_folder_check_delete(folder_path)
 			div_id =  '"#' + object_id + '"'
 		return obj_response.script('$('+div_id+').remove();'),\
 		 obj_response.script("$('#profiledelete').show()")
@@ -81,7 +113,22 @@ def add_professional():
 		else:
 			professional = {'orgtype':orgtype, 'title':orgtitle,\
 			 'summary':orgsummary}
-			pros.insert(professional)
+			value = pros.insert(professional)
+			current = pros.find_one(value)
+			
+			if type(value) == bson.objectid.ObjectId:
+				filename = str(value.__str__())
+				filepath = os.path.join(app.config['UPLOADED_FILES_DEST'],filename)
+				image_folder_check_create(filepath)
+
+				current['imgfolderpath'] = filepath
+				pros.save(current)
+			
+			#if type(value) == bson.objectid.ObjectId:
+			#	v_id = str(value.__str__())
+			#	#create a folder for the profile objectid
+			#	image_folder_check_create(v_id)
+				
 			#return appropriate response
 			return obj_response.script("$('#orgprofileadded').show()"),\
 			 obj_response.script('$("#addorgform").reset()')
@@ -112,6 +159,15 @@ def add_profile():
 		
 		#add the profile into the profiles
 		checkifAdded = profiles.insert(profile)
+		current = profiles.find_one(checkifAdded)
+		
+		if type(checkifAdded) == bson.objectid.ObjectId:
+			filename = str(checkifAdded.__str__())
+			filepath = os.path.join(app.config['UPLOADED_FILES_DEST'],filename)
+			image_folder_check_create(filepath)
+			
+			current['imgfolderpath'] = filepath
+			profiles.save(current)	
 		
 		#check if the profile is added
 		if checkifAdded:
