@@ -63,17 +63,17 @@ footer p
 	</div>
 </div>	
 	<div class="hero-unit">
-
 		
 		<p class="heading">Rural Housing Knowledge Network</p>
 		<hr />
 		<p>Existing tags</p>
-		{% for onetag in alltags %}
-
-			<span style="font-size: 14px" class="label label-info">{{ onetag.value }}</span>
-			<span style="font-size: 14px" class="label label-important"><a style="color: white" href="">x</a></span>&nbsp;&nbsp;&nbsp;&nbsp;
-
+		<ul id="taglist">
+		{% for onetag in alltags %}	
+			<li style="list-style-type: none;" id="tagvalue{{ onetag._id }}"><span class="label label-info">{{ onetag.value }} &nbsp;<a style="color: white" href="javascript://" onclick="Sijax.request('deltag', ['{{ onetag._id}}']);">x</a></span></li>	
+			
 		{% endfor %}
+		</ul>
+		
 		<hr />
 		<p>Add new tags</p>
 		<hr />
