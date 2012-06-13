@@ -69,7 +69,10 @@ footer p
 		<hr />
 		<p>Existing tags</p>
 		{% for onetag in alltags %}
-		<span class="label label-info">{{ onetag.value }}</span>
+
+			<span style="font-size: 14px" class="label label-info">{{ onetag.value }}</span>
+			<span style="font-size: 14px" class="label label-important"><a style="color: white" href="">x</a></span>&nbsp;&nbsp;&nbsp;&nbsp;
+
 		{% endfor %}
 		<hr />
 		<p>Add new tags</p>
