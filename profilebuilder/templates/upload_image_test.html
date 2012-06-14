@@ -36,10 +36,9 @@ footer p
 		<p class="heading">Rural Housing Knowledge Network</p>
 		<hr />
 		
-		<img src="{{ url_for('static', filename='img/uploadedmedia/foobar/guest21N.png') }}" />
 		<p>Upload a new image/set</p>
 		<hr />
-		<form class="form" action="{{ url_for('upload_images') }}" enctype="multipart/form-data" method="POST" >
+		<form class="form" action="{{ url_for('upload_images', profileid=fetched._id) }}" enctype="multipart/form-data" method="POST" >
 			<label>Click on the button below and choose the files</label>
 			<input type=file multiple name="file" class="span7" /><br />
 			
