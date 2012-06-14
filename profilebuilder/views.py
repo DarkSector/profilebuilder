@@ -120,8 +120,9 @@ def add_professional():
 				filename = str(value.__str__())
 				filepath = os.path.join(app.config['UPLOADED_FILES_DEST'],filename)
 				image_folder_check_create(filepath)
-
-				current['imgfolderpath'] = filepath
+				current['imgfolderpath_complete'] = filepath
+				filepath_static = filepath.split('/static/')
+				current['imgfolderpath_retrieve'] = filepath_static[1]
 				pros.save(current)
 			
 			#if type(value) == bson.objectid.ObjectId:
@@ -165,8 +166,9 @@ def add_profile():
 			filename = str(checkifAdded.__str__())
 			filepath = os.path.join(app.config['UPLOADED_FILES_DEST'],filename)
 			image_folder_check_create(filepath)
-			
-			current['imgfolderpath'] = filepath
+			current['imgfolderpath_complete'] = filepath
+			filepath_static = filepath.split('/static/')
+			current['imgfolderpath_retrieve'] = filepath_static[1]
 			profiles.save(current)	
 		
 		#check if the profile is added
@@ -388,7 +390,7 @@ def upload_images(profileid):
 	else:
 		profiles_fetch = True
 		professional_fetched=False
-	fetched_folder_path = fetched['imgfolderpath']
+	fetched_folder_path = fetched['imgfolderpath_complete']
 	
 	if request.method == "POST":
 		
@@ -405,7 +407,7 @@ def upload_images(profileid):
 		elif professional_fetched:
 			pros.save(fetched)
 	return render_template('upload_image_test.html',fetched=fetched)
-	
+################################################################################	
 @app.route('/uploads/<filename>')
 def retrieve_files(filename):
 	"""
@@ -415,7 +417,7 @@ def retrieve_files(filename):
 ################################################################################
 
 	
-################################################################################
+
 
 @flask_sijax.route(app,'/tags')
 def tags():
