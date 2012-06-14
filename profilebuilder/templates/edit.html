@@ -89,9 +89,13 @@ footer p
 						
 					</tr>	
 				{% endfor %}
-				{% endautoescape %}
+				
 			</tbody>	
 		</table>
+		{% for i in profile_info.imagenames %}
+			<img class="imgfromstatic" src="{{ url_for('static', filename=profile_info.imgfolderpath_retrieve +'/'+ i) }}"  />
+		{% endfor %}
+		{% endautoescape %}
 		
 		<a class="btn " href="">Refresh</a>
 		<hr />		
@@ -133,10 +137,15 @@ footer p
 						
 					</tr>	
 				{% endfor %}
-				{% endautoescape %}
+				
+				
+				
 			</tbody>	
 		</table>
-		
+		{% for i in orginfo.imagenames %}
+			<img class="imgfromstatic" src="{{ url_for('static', filename=orginfo.imgfolderpath_retrieve +'/'+ i) }}"  />
+		{% endfor %}
+		{% endautoescape %}
 		<a class="btn " href="">Refresh</a>
 		<hr />		
 		<p><a href="/upload/images/{{ orginfo._id }}">Upload a picture</a></p>
