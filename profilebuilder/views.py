@@ -207,6 +207,139 @@ def add_profile():
 	typeofprofiles = types.find()
 	return render_template('add.html', profiletypes=typeofprofiles, tech=True)
 ################################################################################	
+@flask_sijax.route(app,'/add/tech')
+def add_profile():
+	"""
+	These functions handle profile adding
+	"""
+	def newprofile_handler(obj_response,name,unique,_type):
+		"""
+		name: is the profile title
+		unique: is the unique title that will go into the url
+		_type: is the type of the profile
+		"""
+		#for debug
+		#print name, unique, _type
+		
+		#create a profile dict
+		profile = {'title':name, 'unique': unique, 'profiletype' : _type }
+		
+		#add the profile into the profiles
+		checkifAdded = profiles.insert(profile)
+		current = profiles.find_one(checkifAdded)
+		
+		if type(checkifAdded) == bson.objectid.ObjectId:
+			filename = str(checkifAdded.__str__())
+			filepath = os.path.join(app.config['UPLOADED_FILES_DEST'],filename)
+			image_folder_check_create(filepath)
+			current['imgfolderpath_complete'] = filepath
+			filepath_static = filepath.split('/static/')
+			current['imgfolderpath_retrieve'] = filepath_static[1]
+			profiles.save(current)	
+		
+		#check if the profile is added
+		if checkifAdded:
+			return obj_response.script("$('#profileaddsuccess').show()"),\
+			obj_response.script('$("#addnewprofileform").reset()')
+		else:
+			return obj_response.script("$('#profileaddfail').show()")
+	
+	def newtype_handler(obj_response,profilevalue):
+		"""
+		This function adds a new profile type into the list to choose from
+		
+		"""
+		#debug
+		#print profilevalue
+		
+		#insert type of profile
+		types.insert({'name':profilevalue})
+		
+		#return obj_response.script('Added a new profile type :' + \
+		# profilevalue),\
+		# obj_response.script('$("#profileselect").append("<option value=' + \
+		# profilevalue + '>' + profilevalue + '</option>")')
+		return obj_response.script("$('#addType').modal('toggle')"),\
+		obj_response.script("$('#profiletypeaddsuccess').show()"),\
+		obj_response.script('$("#profileselect").append("<option value=' +\
+		 profilevalue + '>' + profilevalue + '</option>")')
+		
+			
+	if g.sijax.is_sijax_request:
+			g.sijax.register_callback('save_profiletype',newtype_handler)
+			g.sijax.register_callback('save_newprofile', newprofile_handler)	
+			return g.sijax.process_request()
+			
+	typeofprofiles = types.find()
+	return render_template('add.html', profiletypes=typeofprofiles, tech=True)
+################################################################################	
+#@flask_sijax.route(app,'/add/case')
+def add_case():
+	"""
+	These functions handle profile adding
+	"""
+	def newcase_handler(obj_response,name,unique,_type):
+		"""
+		name: is the profile title
+		unique: is the unique title that will go into the url
+		_type: is the type of the profile
+		"""
+		#for debug
+		#print name, unique, _type
+		
+		#create a profile dict
+		case = {'title':name, 'unique': unique, 'profiletype' : _type }
+		
+		#add the profile into the profiles
+		checkifAdded = cases.insert(case)
+		current = cases.find_one(checkifAdded)
+		
+		if type(checkifAdded) == bson.objectid.ObjectId:
+			filename = str(checkifAdded.__str__())
+			filepath = os.path.join(app.config['UPLOADED_FILES_DEST'],filename)
+			image_folder_check_create(filepath)
+			current['imgfolderpath_complete'] = filepath
+			filepath_static = filepath.split('/static/')
+			current['imgfolderpath_retrieve'] = filepath_static[1]
+			cases.save(current)	
+		
+		#check if the profile is added
+		if checkifAdded:
+			return obj_response.script("$('#caseaddsuccess').show()"),\
+			obj_response.script('$("#addnewcaseform").reset()')
+		else:
+			return obj_response.script("$('#caseaddfail').show()")
+	
+	def newtype_handler(obj_response,profilevalue):
+		"""
+		This function adds a new profile type into the list to choose from
+		
+		"""
+		#debug
+		#print profilevalue
+		
+		#insert type of profile
+		types.insert({'name':profilevalue})
+		
+		#return obj_response.script('Added a new profile type :' + \
+		# profilevalue),\
+		# obj_response.script('$("#profileselect").append("<option value=' + \
+		# profilevalue + '>' + profilevalue + '</option>")')
+		return obj_response.script("$('#addType').modal('toggle')"),\
+		obj_response.script("$('#profiletypeaddsuccess').show()"),\
+		obj_response.script('$("#profileselect").append("<option value=' +\
+		 profilevalue + '>' + profilevalue + '</option>")')
+		
+			
+	if g.sijax.is_sijax_request:
+			g.sijax.register_callback('save_profiletype',newtype_handler)
+			g.sijax.register_callback('save_newcase', newcase_handler)	
+			return g.sijax.process_request()
+			
+	typeofprofiles = types.find()
+	return render_template('add.html', profiletypes=typeofprofiles, case=True)
+################################################################################	
+
 @app.route('/edit')
 def edit_404():
 	flash('Please select the profile you want to edit')
@@ -310,7 +443,9 @@ def register():
 ################################################################################
 @app.route('/login', methods=["GET","POST"])
 def login():
-	"""User logging in function"""
+	"""
+	User logging in function
+	"""
 	error = None
 	if request.method == "POST":
 		accuser = request.form['username']
@@ -415,9 +550,6 @@ def retrieve_files(filename):
 	"""
 	return send_from_directory(app.config['UPLOADED_FILES_DEST'],filename)
 ################################################################################
-
-	
-
 
 @flask_sijax.route(app,'/tags')
 def tags():
