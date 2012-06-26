@@ -17,6 +17,7 @@ from profilebuilder import conn, dbobj, users, profiles, types, pros, \
  profiletags
 from profilebuilder import app
 from profilebuilder import ALLOWED_EXTENSIONS
+from profilebuilder import profiletemplates
 
 ################################################################################
 
@@ -207,6 +208,43 @@ def add_profile():
 	typeofprofiles = types.find()
 	return render_template('add.html', profiletypes=typeofprofiles, tech=True)
 ################################################################################	
+@app.route('/add/tech/template', methods=["POST", "GET"])
+def add_tech_template():
+	"""
+	Tech template adding
+	"""
+	
+	if request.method == "POST":
+		profile_title = request.form['profilename']
+		unique_name = request.form['unique']
+		intro = request.form['introduction']
+		profile_type = request.form['profiletype']
+		dosanddonts = request.form['dos']
+		designing = request.form['design']
+		material_labour = request.form['materials']
+		adv = request.form['advantages']
+		
+		#print profile_title, unique_name, profile_type, dosanddonts, designing, material_labour, adv
+		new_profile = {'title': profile_title, 'unique' : unique_name, 'profiletype': profile_type, 'Introduction': intro, 'Dos and Donts': dosanddonts, 'Design and Construction': designing, 'Material and Labour': material_labour, 'Advantages and Disadvantages': adv }
+	
+		checkifAdded = profiles.insert(new_profile)
+		current = profiles.find_one(checkifAdded)
+	
+		if type(checkifAdded) == bson.objectid.ObjectId:
+			filename = str(checkifAdded.__str__())
+			filepath = os.path.join(app.config['UPLOADED_FILES_DEST'],filename)
+			image_folder_check_create(filepath)
+			current['imgfolderpath_complete'] = filepath
+			filepath_static = filepath.split('/static/')
+			current['imgfolderpath_retrieve'] = filepath_static[1]
+			profiles.save(current)
+
+	typeofprofiles = types.find()
+	return render_template('tech_template.html',profiletypes=typeofprofiles)
+
+################################################################################	
+
+
 @flask_sijax.route(app,'/add/tech')
 def add_profile():
 	"""
@@ -274,6 +312,7 @@ def add_profile():
 	return render_template('add.html', profiletypes=typeofprofiles, tech=True)
 ################################################################################	
 #@flask_sijax.route(app,'/add/case')
+#@app.route('/ad')
 def add_case():
 	"""
 	These functions handle profile adding
@@ -339,7 +378,15 @@ def add_case():
 	typeofprofiles = types.find()
 	return render_template('add.html', profiletypes=typeofprofiles, case=True)
 ################################################################################	
+#@app.route('/add/case/template')
+def add_case_template():
+	"""
+	Add a case from the predefined templates
+	"""
+	
+	return render_template('case_template.html')
 
+################################################################################
 @app.route('/edit')
 def edit_404():
 	flash('Please select the profile you want to edit')
