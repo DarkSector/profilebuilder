@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% block css %}
+.container > .content{
+	background-color: #fff;
+	padding: 20px;
+	/* negative indent the amount of the padding to maintain the grid system */
+	margin: 0 -20px;
+	-webkit-border-radius: 0 0 6px 6px;
+	-moz-border-radius: 0 0 6px 6px;
+	border-radius: 0 0 6px 6px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+footer p
+{
+	text-align: center;
+}
+
+.newbody
+{
+	min-height: 200px
+}
+
+.heading
+{
+	text-align: center;
+}
+
+{% endblock %}
+
+{% block js %}
+
+<script src="{{ url_for('static', filename='js/libs/bootstrap/transition.js') }}"></script>
+<script src="{{ url_for('static', filename='js/libs/bootstrap/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/libs/bootstrap/alert.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/tiny_mce/tiny_mce.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/tinyscript.js') }}"></script>
+
+{% endblock %}
+
+{% block body %}
+
+{% autoescape false %}
+<div class="hero-unit">
+	
+	<div class="heading">
+		<p>Rural Housing Knowledge Network</p>
+		<hr />
+		<p>Add a professional profile</p>
+	</div>
+	<form class="form" method="POST" action="{{ url_for('add_tech_template') }}">
+		
+		<label>Name</label>
+		<input type="text" class="span9" placeholder="Name of the profile" name="profilename" id="profilename" /><br />
+		
+		<label>Unique</label>
+		<input type="text" class="span9" placeholder="Unique name of the profile" name="unique" id="unique" /><br />
+		
+		<label>Profile types</label>
+		<select id="profileselect" name="profiletype" class="span5">
+			<option value="None">Click to Select</option>
+			{% for ptype in profiletypes %}
+			<option value="{{ ptype.name }}">{{ ptype.name }}</option>
+			{% endfor %}
+		</select>
+		
+		<label>Introduction</label>
+		<textarea id="intro" placeholder="Introduction" rows="15" class="span9" name="introduction"></textarea><br />
+		
+		<label>Design and construction</label>
+		<textarea rows="15" name="design" class="span9" id="designconstruction"></textarea><br />
+		
+		<label>Dos and Donts</label>
+		<textarea rows="15" name="dos" class="span9" id="dosdonts"></textarea><br />
+		
+		<label>Materials and Labour</label>
+		<textarea rows="15" name="materials" class="span9" id="materialslabour"></textarea><br />
+		
+		<label>Advantages and Limitations</label>
+		<textarea rows="15" name="advantages" class="span9" id="advantagedisadvantage"></textarea><br />
+		
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>	
+</div>	
+{% endautoescape %}
+{% endblock %}
