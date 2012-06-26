@@ -54,3 +54,4 @@ profiletags = dbobj['alltags']
 
 #third level imports
 import profilebuilder.views
+import profilebuilder.profiletemplates
