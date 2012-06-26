@@ -18,8 +18,10 @@ footer p
 		<p style="text-align: center">Add a profile</p>
 	</div>
 <p>Please select the type of profile</p>
-<a href="{{ url_for('add_professional') }}" class="btn  btn-primary btn-large" >Professional/Organization</a><br /><br />
-<p>OR</p>
-<a href="{{ url_for('add_profile') }}" class="btn  btn-danger btn-large" >Technical profile</a> 
+<hr />
+<a href="{{ url_for('add_professional') }}" class="btn btn-large" >Professional/Organization profile</a><br /><br />
+<a href="{{ url_for('add_profile') }}" class="btn btn-large" >Technical profile: Raw</a> / <a href="{{ url_for('add_tech_template') }}" class="btn btn-large" >Templated profile</a>
+<br /><br />
+<a href="" class="btn btn-large" >Case Study</a> 
 </div>
 {% endblock %}
