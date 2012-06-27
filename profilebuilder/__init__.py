@@ -48,6 +48,7 @@ conn = Connection(pymongoconfig.MONGO_HOST, pymongoconfig.MONGO_PORT)
 dbobj = conn[pymongoconfig.MONGO_DATABASE]
 users = dbobj['accesslist']
 profiles = dbobj['profiles']
+cases = dbobj['casestudies']
 types = dbobj['profiletypes']
 pros = dbobj['professionals']
 profiletags = dbobj['alltags']
