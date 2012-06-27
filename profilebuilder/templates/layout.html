@@ -31,13 +31,28 @@
 <body>
 <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
 	<div class="container">
+	<a href="{{ url_for('show_profiles') }}"><img src="{{ url_for('static', filename='img/admin_logo.png') }}" /></a><br /><br />	
 		{% if session.logged_in %}
+		<div class="row">
+			<div class="span3">
 				<a style="font-size: 16px;" href="{{ url_for('tags') }}">+ Tag management</a><br />
+			</div>
+			<div class="span3">
 				<a style="font-size: 16px;" href="{{ url_for('show_profiles') }}">+ Show all profiles</a><br />
-				
+			</div>	
+			<div class="span3">
 				<a style="font-size: 16px;" href="{{ url_for('check_pro') }}">+ Add Profile</a><br />
-				
+			</div>
+			<div class="span3">
 				<a style="font-size: 16px;" href="{{ url_for('logout') }}"> - Logout</a>
+			</div>	
+		</div>	
+				
+				
+				
+				
+				
+				
 <hr />
 				{% block body %}
 				{% endblock %}
