@@ -14,7 +14,7 @@ from flask.ext.bcrypt import bcrypt, generate_password_hash, check_password_hash
 import flask_sijax
 from werkzeug import secure_filename
 from profilebuilder import conn, dbobj, users, profiles, types, pros, \
- profiletags
+ profiletags, cases
 from profilebuilder import app
 from profilebuilder import ALLOWED_EXTENSIONS
 from profilebuilder import profiletemplates
@@ -101,7 +101,6 @@ def show_profiles():
 def check_pro():
 	return render_template('choices.html')
 ################################################################################
-
 @flask_sijax.route(app,'/add/pro')
 def add_professional():
 	
@@ -141,7 +140,6 @@ def add_professional():
 			
 	return render_template('add.html', professional=True)
 ################################################################################	
-
 @flask_sijax.route(app,'/add/tech')
 def add_profile():
 	"""
@@ -223,13 +221,24 @@ def add_tech_template():
 		designing = request.form['design']
 		material_labour = request.form['materials']
 		adv = request.form['advantages']
+		tags = request.form.getlist('tags')
+		profilelinks = request.form.getlist('profilelink')
 		
 		#print profile_title, unique_name, profile_type, dosanddonts, designing, material_labour, adv
-		new_profile = {'title': profile_title, 'unique' : unique_name, 'profiletype': profile_type, 'Introduction': intro, 'Dos and Donts': dosanddonts, 'Design and Construction': designing, 'Material and Labour': material_labour, 'Advantages and Disadvantages': adv }
+		
+		new_profile = {'title': profile_title,\
+		'unique' : unique_name, 'profiletype': profile_type, \
+		'Introduction': intro, 'Dos and Donts': dosanddonts,\
+		'Design and Construction': designing, \
+		'Material and Labour': material_labour, \
+		'Advantages and Disadvantages': adv, \
+		'Tags' : tags ,\
+		'Related Profiles' : profilelinks }
+	
 	
 		checkifAdded = profiles.insert(new_profile)
 		current = profiles.find_one(checkifAdded)
-	
+		
 		if type(checkifAdded) == bson.objectid.ObjectId:
 			filename = str(checkifAdded.__str__())
 			filepath = os.path.join(app.config['UPLOADED_FILES_DEST'],filename)
@@ -238,13 +247,19 @@ def add_tech_template():
 			filepath_static = filepath.split('/static/')
 			current['imgfolderpath_retrieve'] = filepath_static[1]
 			profiles.save(current)
-
+		
 	typeofprofiles = types.find()
-	return render_template('tech_template.html',profiletypes=typeofprofiles)
-
+	alltags = profiletags.find()
+	
+	allprofiles = profiles.find()
+	professionals = pros.find()
+	
+	return render_template('tech_template.html',\
+	profiletypes=typeofprofiles,\
+	tags=alltags,\
+	techs=allprofiles, \
+	orgs=professionals)
 ################################################################################	
-
-
 @flask_sijax.route(app,'/add/tech')
 def add_profile():
 	"""
@@ -311,26 +326,24 @@ def add_profile():
 	typeofprofiles = types.find()
 	return render_template('add.html', profiletypes=typeofprofiles, tech=True)
 ################################################################################	
-#@flask_sijax.route(app,'/add/case')
-#@app.route('/ad')
-def add_case():
+@app.route('/add/case/template', methods=["POST","GET"])
+def add_case_template():
 	"""
-	These functions handle profile adding
+	Add a case from the predefined templates
 	"""
-	def newcase_handler(obj_response,name,unique,_type):
-		"""
-		name: is the profile title
-		unique: is the unique title that will go into the url
-		_type: is the type of the profile
-		"""
-		#for debug
-		#print name, unique, _type
+	if request.method == "POST":
+		#background
+		bg = request.form['background']
+		#stake holders
+		sh = request.form['stakeholders']
+		#tech specs
+		ts = request.form['techspecs']
+		#highlights
+		hl = request.form['highlights']
 		
-		#create a profile dict
-		case = {'title':name, 'unique': unique, 'profiletype' : _type }
+		new_case = {'Background': bg, 'Stake Holders': sh, 'Technical Specifications': ts, 'Highlights': hl}
 		
-		#add the profile into the profiles
-		checkifAdded = cases.insert(case)
+		checkifAdded = cases.insert(new_case)
 		current = cases.find_one(checkifAdded)
 		
 		if type(checkifAdded) == bson.objectid.ObjectId:
@@ -340,52 +353,17 @@ def add_case():
 			current['imgfolderpath_complete'] = filepath
 			filepath_static = filepath.split('/static/')
 			current['imgfolderpath_retrieve'] = filepath_static[1]
-			cases.save(current)	
-		
-		#check if the profile is added
-		if checkifAdded:
-			return obj_response.script("$('#caseaddsuccess').show()"),\
-			obj_response.script('$("#addnewcaseform").reset()')
-		else:
-			return obj_response.script("$('#caseaddfail').show()")
-	
-	def newtype_handler(obj_response,profilevalue):
-		"""
-		This function adds a new profile type into the list to choose from
-		
-		"""
-		#debug
-		#print profilevalue
-		
-		#insert type of profile
-		types.insert({'name':profilevalue})
-		
-		#return obj_response.script('Added a new profile type :' + \
-		# profilevalue),\
-		# obj_response.script('$("#profileselect").append("<option value=' + \
-		# profilevalue + '>' + profilevalue + '</option>")')
-		return obj_response.script("$('#addType').modal('toggle')"),\
-		obj_response.script("$('#profiletypeaddsuccess').show()"),\
-		obj_response.script('$("#profileselect").append("<option value=' +\
-		 profilevalue + '>' + profilevalue + '</option>")')
-		
-			
-	if g.sijax.is_sijax_request:
-			g.sijax.register_callback('save_profiletype',newtype_handler)
-			g.sijax.register_callback('save_newcase', newcase_handler)	
-			return g.sijax.process_request()
+			profiles.save(current)
 			
 	typeofprofiles = types.find()
-	return render_template('add.html', profiletypes=typeofprofiles, case=True)
-################################################################################	
-#@app.route('/add/case/template')
-def add_case_template():
-	"""
-	Add a case from the predefined templates
-	"""
-	
-	return render_template('case_template.html')
+	alltags = profiletags.find()
 
+	allprofiles = profiles.find()
+	professionals = pros.find()	
+	return render_template('case_template.html', \
+	tags=alltags, \
+	profiletypes=typeofprofiles,\
+	orgs=professionals)
 ################################################################################
 @app.route('/edit')
 def edit_404():
@@ -508,7 +486,7 @@ def login():
 		else:
 			flash("Incorrect username or password")
 	return render_template('login.html', error=error,loginpage=True)
-
+################################################################################
 @app.route('/logout')
 def logout():
 	"""
