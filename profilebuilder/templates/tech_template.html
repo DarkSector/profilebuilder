@@ -80,8 +80,28 @@ footer p
 		
 		<label>Advantages and Limitations</label>
 		<textarea rows="15" name="advantages" class="span9" id="advantagedisadvantage"></textarea><br />
+		<hr />
+		<h3>Tags</h3>
+		<!-- <select multiple="multiple" name="taglist" class="span4">-->
+			{% for tag in tags %}
+			<input type="checkbox" name="tags" value="{{ tag._id }}" />{{ tag.value }}
+			{% endfor %}
+		<!-- </select>	-->
 		
+		<hr />
+
+		<h3>Template linking</h3>
+		<select multiple="multiple" name="profilelink" class="span9">
+			{% for tech in techs %}
+			<option value="{{ tech._id }}">{{ tech.title }}</option>
+			{% endfor %}
+			{% for org in orgs %}
+			<option value="{{ org._id }}">{{ org.title }}</option>
+			{% endfor %}
+		</select>
+		<hr />	
 		<button type="submit" class="btn btn-primary">Submit</button>
+		<hr />
 	</form>	
 </div>	
 {% endautoescape %}
