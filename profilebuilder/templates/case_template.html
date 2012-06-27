@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+{% block css %}
+.container > .content{
+	background-color: #fff;
+	padding: 20px;
+	/* negative indent the amount of the padding to maintain the grid system */
+	margin: 0 -20px;
+	-webkit-border-radius: 0 0 6px 6px;
+	-moz-border-radius: 0 0 6px 6px;
+	border-radius: 0 0 6px 6px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+footer p
+{
+	text-align: center;
+}
+
+.newbody
+{
+	min-height: 200px
+}
+
+.heading
+{
+	text-align: center;
+}
+
+{% endblock %}
+
+{% block js %}
+
+<script src="{{ url_for('static', filename='js/libs/bootstrap/transition.js') }}"></script>
+<script src="{{ url_for('static', filename='js/libs/bootstrap/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/libs/bootstrap/alert.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/tiny_mce/tiny_mce.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/tinyscript.js') }}"></script>
+
+{% endblock %}
+
+{% block body %}
+
+{% autoescape false %}
+<div class="hero-unit">
+	
+	<div class="heading">
+		<p>Rural Housing Knowledge Network</p>
+		<hr />
+		<p>Add a professional profile</p>
+	</div>
+	<form class="form" method="POST" action="{{ url_for('add_case_template') }}">
+		
+		<label>Name</label>
+		<input type="text" class="span9" placeholder="Name of the case study" name="casename" id="casename" /><br />
+		
+		<label>Unique</label>
+		<input type="text" class="span9" placeholder="Unique name of the case" name="unique" id="unique" /><br />
+		
+		<label>Profile types</label>
+		<select id="profileselect" name="profiletype" class="span5">
+			<option value="None">Click to Select</option>
+			{% for ptype in profiletypes %}
+			<option value="{{ ptype.name }}">{{ ptype.name }}</option>
+			{% endfor %}
+		</select>
+		
+		<label>Background</label>
+		<textarea id="background" placeholder="Background" rows="15" class="span9" name="background"></textarea><br />
+		
+		<label>Stake Holders</label>
+		<textarea rows="15" name="stakeholders" class="span9" id="stakeholder"></textarea><br />
+		
+		<label>Technical Specifications</label>
+		<textarea rows="15" name="techspecs" class="span9" id="techspecs"></textarea><br />
+		
+		<label>Highlights</label>
+		<textarea rows="15" name="highlights" class="span9" id="highlights"></textarea><br />
+		
+		<hr />
+		<h3>Tags</h3>
+		<!-- <select multiple="multiple" name="taglist" class="span4">-->
+			{% for tag in tags %}
+			<input type="checkbox" name="tags" value="{{ tag._id }}" />{{ tag.value }}
+			{% endfor %}
+		<!-- </select>	-->
+		
+		<hr />
+
+		<h3>Template linking</h3>
+		<select multiple="multiple" name="profilelink" class="span9">
+			{% for tech in techs %}
+			<option value="{{ tech._id }}">{{ tech.title }}</option>
+			{% endfor %}
+			{% for org in orgs %}
+			<option value="{{ org._id }}">{{ org.title }}</option>
+			{% endfor %}
+		</select>
+		<hr />	
+		<button type="submit" class="btn btn-primary">Submit</button>
+		<hr />
+	</form>	
+</div>	
+{% endautoescape %}
+{% endblock %}
